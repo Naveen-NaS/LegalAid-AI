@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { zodResolver } from "@hookform/resolvers/zod"
+// import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { handleCredentialsSignIn, handleCredentialsSignUp, handelResendVerficationCode } from "@/app/actions/authActions";
+// import { handleCredentialsSignIn, handleCredentialsSignUp, handelResendVerficationCode } from "@/app/actions/authActions";
 
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 
@@ -44,10 +44,10 @@ const VerifyEmail = (email: string, password: string) => {
   const [globalSuccess, setGlobalSuccess] = useState("none");
 
   const form = useForm<z.infer<typeof OTPSchema>>({
-    resolver: zodResolver(OTPSchema),
-    defaultValues: {
-      pin: "",
-    },
+    // resolver: zodResolver(OTPSchema),
+    // defaultValues: {
+    //   pin: "",
+    // },
   })
 
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -79,7 +79,7 @@ const VerifyEmail = (email: string, password: string) => {
       const response_data = await response.json();
       console.log(data);
       if(response.ok) {
-        await handleCredentialsSignIn({email, password});
+        // await handleCredentialsSignIn({email, password});
         setGlobalMessage(response_data.message);
         setGlobalSuccess("true");
       } else {
@@ -114,10 +114,12 @@ const VerifyEmail = (email: string, password: string) => {
               </p>
             </header>
             
+            {/* <Form {...form}></Form> */}
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6">
+            {/* <form onSubmit={form.handleSubmit(onSubmit)} className="w-2/3 space-y-6"> */}
+              <form  className="w-2/3 space-y-6">
                 <FormField
-                  control={form.control}
+                  // control={form.control}
                   name="pin"
                   render={({ field }) => (
                     <FormItem>
