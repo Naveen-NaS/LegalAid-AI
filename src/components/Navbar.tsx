@@ -202,9 +202,9 @@ const Navbar: React.FC = () => {
 
   const links = [
     { title: "Home", href: "/" },
-    { title: "Features", href: "#features" },
-    { title: "Pricing", href: "#pricing" },
-    { title: "Contact", href: "#contact" },
+    { title: "About Us", href: "/About Us" },
+    { title: "Latest", href: "/Latest" },
+    { title: "Contact", href: "/contact" },
   ];
 
   return (
