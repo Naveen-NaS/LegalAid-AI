@@ -4,11 +4,11 @@ import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
 
-import { zodResolver } from "@hookform/resolvers/zod"
+// import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 
-import { handleCredentialsSignIn, handleCredentialsSignUp, handelResendVerficationCode } from "@/app/actions/authActions";
+// import { handleCredentialsSignIn, handleCredentialsSignUp, handelResendVerficationCode } from "@/app/actions/authActions";
 
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 
@@ -44,7 +44,7 @@ const VerifyEmail = (email: string, password: string) => {
   const [globalSuccess, setGlobalSuccess] = useState("none");
 
   const form = useForm<z.infer<typeof OTPSchema>>({
-    resolver: zodResolver(OTPSchema),
+    // resolver: zodResolver(OTPSchema),
     defaultValues: {
       pin: "",
     },
