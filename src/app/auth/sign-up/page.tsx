@@ -5,27 +5,23 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
 
-
 // import { z } from "zod";
 // import { signUpSchema } from "@/lib/zod";
 // import { zodResolver } from "@hookform/resolvers/zod";
 // import { handleCredentialsSignUp } from "@/app/actions/authActions";
-
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-
 import GlobalMessage from "@/components/GlobalMessage";
 import { h1 } from "framer-motion/client";
 // import VerifyEmail from "@/components/EmailVerification";
 
-
 export default function SignUp() {
   const [isSuccess, setIsSuccess] = useState(false);
-
+  
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
@@ -81,9 +77,9 @@ export default function SignUp() {
     <div className="h-[100vh] bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 overflow-y-auto">
       <div className="min-h-screen w-full flex items-center justify-center px-4 sm:px-6 md:px-8 lg:px-10">
         {!isSuccess ? (
-          <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-6 shadow-input bg-gradient-to-br from-customBlue1 via-customBlue2 to-customPurple ">
+          <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-6 shadow-input bg-[#1e293b]">
             {globalMessage && <GlobalMessage success={globalSuccess} message={globalMessage} />}
-            <h1 className="font-bold text-2xl md:text-3xl text-neutral-200 dark:text-neutral-200 text-center md:text-left flex items-center">
+            <h1 className="font-bold text-2xl md:text-3xl text-white text-center md:text-left flex items-center">
               Welcome to {" LEAGALAID-AI"}
               <Link href="/" className="ml-2 flex items-center">
                 <Image
@@ -95,13 +91,13 @@ export default function SignUp() {
                 />
               </Link>
             </h1>
-            <p className="text-neutral-100 text-sm max-w-sm mt-2 dark:text-neutral-300 text-center md:text-left">
+            <p className="text-white text-sm max-w-sm mt-2 text-center md:text-left">
               Enter your details to create an account
             </p>
 
             {/* <form className="my-8" onSubmit={handleSubmit(onSubmit)}></form> */}
             <form className="my-8">
-
+              {/* Email Address */}
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="email" className="text-neutral-200 mb-1.5">
                   Email Address
@@ -110,12 +106,13 @@ export default function SignUp() {
                   id="email"
                   placeholder="test@gmail.com"
                   type="email"
-                  className="bg-gray-700 text-neutral-200"
+                  className="bg-[#334155] text-white"
                   // {...register("email")}
                 />
                 {/* {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>} */}
               </LabelInputContainer>
 
+              {/* Username and Referral Code */}
               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-2">
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="username" className="text-neutral-200 mb-1.5">
@@ -125,11 +122,12 @@ export default function SignUp() {
                     id="username"
                     placeholder="Enter your username"
                     type="text"
-                    className="bg-gray-700 text-neutral-200"
+                    className="bg-[#334155] text-white"
                     // {...register("username")}
                   />
                   {/* {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>} */}
                 </LabelInputContainer>
+
                 <LabelInputContainer className="mb-4 relative">
                   <Label htmlFor="referralcode" className="text-neutral-200 mb-1.5">
                     Referral Code
@@ -139,9 +137,11 @@ export default function SignUp() {
                       id="referralcode"
                       placeholder="Enter referral code"
                       type="text"
-                      className="bg-gray-700 text-neutral-200"
+                      className="bg-[#334155] text-white"
                       // {...register("referralCode")}
+
                     />
+                    {/* Help Icon */}
                     <Link href="/forum">
                       <span className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
                         <HelpCircle className="text-white" />
@@ -170,6 +170,7 @@ export default function SignUp() {
                 </LabelInputContainer>
               </div>
 
+              {/* Password and Confirm Password */}
               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
                 <LabelInputContainer>
                   <Label htmlFor="password" className="text-neutral-200 mb-1.5">
@@ -179,11 +180,12 @@ export default function SignUp() {
                     id="password"
                     placeholder="••••••••"
                     type="password"
-                    className="bg-gray-700 text-neutral-200"
+                    className="bg-[#334155] text-white"
                     // {...register("password")}
                   />
                   {/* {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>} */}
                 </LabelInputContainer>
+
                 <LabelInputContainer>
                   <Label htmlFor="confirmPassword" className="text-neutral-200 mb-1.5">
                     Confirm Password
@@ -191,19 +193,21 @@ export default function SignUp() {
                   <Input
                     id="confirmPassword"
                     placeholder="Re-enter Password"
-                    type="text"
-                    className="bg-gray-700 text-neutral-200"
+                    type="password"
+                    className="bg-[#334155] text-white"
                     // {...register("confirmPassword")}
                   />
                   {/* {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>} */}
                 </LabelInputContainer>
               </div>
 
-
+              {/* Submit Button */}
               <button
-                className="bg-slate-950 relative group/btn w-full text-white rounded-md h-10 font-medium shadow-[0px_1px_0px_0px_#ffffff40_inset,0px_-1px_0px_0px_#ffffff40_inset] dark:shadow-[0px_1px_0px_0px_var(--zinc-800)_inset,0px_-1px_0px_0px_var(--zinc-800)_inset]"
+                className="bg-[#20c997] hover:bg-[#17a589] w-full text-white rounded-md h-10 font-medium shadow-lg transition-colors duration-300"
                 type="submit"
               >
+                Create Account &rarr;
+
                 {/* {isSubmitting ? (
                   <>
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -218,11 +222,13 @@ export default function SignUp() {
                     <BottomGradient />
                   </>
                 )} */}
+
               </button>
 
-
+              {/* Divider */}
               <div className="bg-gradient-to-r from-transparent via-neutral-300 dark:via-neutral-700 to-transparent my-4 h-[1px] w-full" />
 
+              {/* Sign-In Link */}
               <div className="flex justify-center -mb-10">
                 <p className="text-neutral-100 text-l max-w-sm dark:text-neutral-300">
                   Already registered?{" "}
@@ -235,6 +241,7 @@ export default function SignUp() {
           </div>
         ) : (
           // <VerifyEmail username={username} email={email} password={password} />
+          // Placeholder for success state or verification component
           <h1>Hello World!</h1>
         )}
       </div>
@@ -243,19 +250,19 @@ export default function SignUp() {
 }
 
 const LabelInputContainer: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => {
-    return (
-      <div className={cn("flex flex-col w-full", className)}>
-        {children}
-      </div>
-    );
-  };
-  
-  
+  return (
+    <div className={cn("flex flex-col w-full", className)}>
+      {children}
+    </div>
+  );
+};
+
 const BottomGradient = () => {
   return (
     <>
-      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-amber-500 to-transparent" />
-      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-1/2 mx-auto -bottom-px inset-x-10 bg-gradient-to-r from-transparent via-orange-400 to-transparent" />
+      <span className="group-hover/btn:opacity-100 block transition duration-500 opacity-0 absolute h-px w-full -bottom-px inset-x-0 bg-gradient-to-r from-transparent via-teal-500 to-transparent" />
+      <span className="group-hover/btn:opacity-100 blur-sm block transition duration-500 opacity-0 absolute h-px w-full mx-auto -bottom-px inset-x-px bg-gradient-to-r from-transparent via-teal-400 to-transparent" />
     </>
   );
 };
+
