@@ -65,7 +65,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
         <Navbar />
-        <div style={{ paddingTop: '80px' }}> {/* Apply padding here */}
+        <div style={{ paddingTop: '70px' }}> {/* Apply padding here */}
           {children}
         </div>
       </body>
