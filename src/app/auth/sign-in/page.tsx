@@ -62,7 +62,7 @@ export default function SignIn() {
   return (
     <div className="h-[100vh] bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 overflow-y-auto">
       {/* Adjusted padding and margin */}
-      <div className="min-h-[90vh] w-full flex items-start justify-center px-4 sm:px-6 md:px-8 lg:px-10 mt-4 md:mt-8">
+      <div className="min-h-[100vh] w-full flex items-start justify-center px-4 sm:px-6 md:px-8 lg:px-10 mt-16">        
         {!isSuccess ? (
           <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-6 shadow-input bg-[#1e293b]">
             {globalMessage && <GlobalMessage success={globalSuccess} message={globalMessage} />}
