@@ -38,7 +38,7 @@ export default function Home() {
                 src="/ai-robot.png"
                 height="400"
                 width="400"
-                className="rounded-xl shadow-lg"
+                className="rounded-xl"
                 alt="LegalAID AI Thumbnail"
             />
         </motion.div>

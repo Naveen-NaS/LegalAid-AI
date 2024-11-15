@@ -84,11 +84,11 @@ export default function SignUp() {
           <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-6 shadow-input bg-gradient-to-br from-customBlue1 via-customBlue2 to-customPurple ">
             {globalMessage && <GlobalMessage success={globalSuccess} message={globalMessage} />}
             <h1 className="font-bold text-2xl md:text-3xl text-neutral-200 dark:text-neutral-200 text-center md:text-left flex items-center">
-              Welcome to{""}
+              Welcome to {" LEAGALAID-AI"}
               <Link href="/" className="ml-2 flex items-center">
                 <Image
                   src="/logo.png"
-                  alt="Logo"
+                  alt=" "
                   width={150}
                   height={150}
                   className="hover:opacity-80 transition-opacity duration-300"
