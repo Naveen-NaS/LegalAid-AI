@@ -3,10 +3,10 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 
-// Form submission handler
+
 const sendMessage = async (data: any) => {
   try {
-    const response = await fetch("/api/send-email", {
+    const response = await fetch("/api/email", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -29,12 +29,15 @@ export default function ContactUs() {
   const [globalMessage, setGlobalMessage] = useState("");
   const [globalSuccess, setGlobalSuccess] = useState("none");
 
-  // React Hook Form setup
+
   const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
 
   const onSubmit = async (data: any) => {
+    console.log('Submitting data:', data); 
     const result = await sendMessage(data);
-    if (result) {
+    console.log('Result:', result); 
+  
+    if (result?.success) {
       setIsSuccess(true);
       setGlobalMessage("Message sent successfully!");
       setGlobalSuccess("true");
@@ -46,16 +49,18 @@ export default function ContactUs() {
 
   return (
     <div className="h-[100vh] bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 overflow-y-auto">
-      {/* Contact Us Strip */}
-      <div className="w-full bg-[#1e293b] py-10 text-left">
-        <h2 className="text-white text-lg ml-8">Reach Out to Us</h2>
-        <h1 className="font-bold text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500 ml-7">
+ 
+      <div className="w-full bg-[#1e293b] py-10">
+        <div className="ml-8"> 
+          <h2 className="text-white text-lg">Reach out to Us</h2>
+          <h1 className="font-bold text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500">
             Contact Us
-        </h1>
+          </h1>
+        </div>
       </div>
 
-      {/* Form Section */}
-      <div className="min-h-[90vh] w-full flex items-start justify-center px-4 sm:px-6 md:px-8 lg:px-10 mt-4 md:mt-8">
+   
+      <div className="min-h-[90vh] w-full flex items-start justify-center px-4 sm:px-6 md:px-8 lg:px-10 mt-4 md:mt-8 mb-12">
         {!isSuccess ? (
           <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-6 shadow-input bg-[#1e293b]">
             {globalMessage && (
@@ -63,7 +68,7 @@ export default function ContactUs() {
                 {globalMessage}
               </p>
             )}
-            <h1 className="font-bold text-xl md:text-2xl text-white text-center md:text-left">
+            <h1 className="font-bold text-xl md:text-2xl text-white text-left">
               Send us a message
             </h1>
 
@@ -90,14 +95,13 @@ export default function ContactUs() {
                   {...register("email", {
                     required: "This field is required",
                     pattern: {
-                      value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$/,
+                      value: /^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-.]+$/,
                       message: "Invalid email address",
                     },
                   })}
                   className="bg-[#334155] text-white w-full p-2 rounded-md"
                 />
-                {/* Error handling with optional chaining and fallback */}
-                {errors.email && typeof errors.email.message === 'string' && (
+                {errors.email?.message && typeof errors.email.message === 'string' && (
                   <p className="text-red-500">{errors.email.message}</p>
                 )}
               </LabelInputContainer>
