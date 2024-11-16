@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI, HarmCategory, HarmBlockThreshold } from "@google/generative-ai";
 import { NextApiRequest, NextApiResponse } from "next";
 
-const MODEL_NAME: string = "gemini-1.5-pro";
+const MODEL_NAME: string = "gemini-1.5-flash-001";
 
 // const API_KEY: string | undefined = process.env.GOOGLE_API_KEY;
 // console.log(API_KEY)
@@ -10,7 +10,7 @@ const MODEL_NAME: string = "gemini-1.5-pro";
 
 // Helper functions
 async function determinePredMetal(prompt: string) {
-  const API_KEY = process.env.GOOGLE_API_KEY || 'AIzaSyCd617Pf-oDb3wy1UeziFXWN_EY5cT7Kh4';
+  const API_KEY = process.env.GOOGLE_API_KEY || 'AIzaSyDlemBW0ydjt_g9TtOCBB-peCsZGbNIb-I';
   const genAI = new GoogleGenerativeAI(API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
   const generationConfig = { temperature: 0.7, maxOutputTokens: 50 };
@@ -25,7 +25,7 @@ async function determinePredMetal(prompt: string) {
 }
 
 async function determinePriceMetal(prompt: string) {
-  const API_KEY = process.env.GOOGLE_API_KEY || 'AIzaSyCd617Pf-oDb3wy1UeziFXWN_EY5cT7Kh4';
+  const API_KEY = process.env.GOOGLE_API_KEY || 'AIzaSyDlemBW0ydjt_g9TtOCBB-peCsZGbNIb-I';
   const genAI = new GoogleGenerativeAI(API_KEY);
   const model = genAI.getGenerativeModel({ model: "gemini-1.5-pro" });
   const generationConfig = { temperature: 0.7, maxOutputTokens: 50 };
@@ -187,7 +187,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
       }
 
       // Initialize Google Generative AI and send message
-      const API_KEY = process.env.GOOGLE_API_KEY || 'AIzaSyCd617Pf-oDb3wy1UeziFXWN_EY5cT7Kh4';
+      const API_KEY = process.env.GOOGLE_API_KEY || 'AIzaSyDlemBW0ydjt_g9TtOCBB-peCsZGbNIb-I';
       const genAI = new GoogleGenerativeAI(API_KEY);
       const model = genAI.getGenerativeModel({ model: MODEL_NAME });
       
@@ -223,7 +223,7 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse)
 
     let finalHistory: Content[] = [];
 
-    finalHistory.push({ role: "user", parts: [{ text: "Consider yourself as 'Genie', and talk and behave like the actual 'Genie' as much as possible to make user feel that you are the same character. Basically you are personal adviser to the CEO of a company. You are developed by 'Naveen Sharma' Explain things like an extremely experienced business analyst and answer in a formated and efficient way like 'Start each new pointer with newline'. Its must to use emojis in responses to be friendly wherever needed. But always introduce yourself as named Genie." }] });
+    finalHistory.push({ role: "user", parts: [{ text: "Consider yourself as 'Genie', and talk and behave like the actual 'Genie' as much as possible to make user feel that you are the same character. Basically you are personal adviser to the CEO of a company. You are developed by 'LEAGALAID-AI TEAM' Explain things like an extremely experienced business analyst and answer in a formated and efficient way like 'Start each new pointer with newline'. Its must to use emojis in responses to be friendly wherever needed. But always introduce yourself as named Genie." }] });
     finalHistory.push({ role: "model", parts: [{ text: "" }] });
 
     finalHistory.push(...history.map((entry: { user: string; message: string }) => ({
