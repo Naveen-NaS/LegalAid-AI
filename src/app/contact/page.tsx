@@ -142,7 +142,7 @@ export default function ContactUs() {
           </div>
         ) : (
           // Success message or feedback can be shown here after form submission.
-          <h1>Thank you for reaching out!</h1>
+          <h1 className="font-bold text-xl md:text-2xl text-green-500 text-center"><strong>Thank you for reaching out!</strong></h1>
         )}
       </div>
     </div>
