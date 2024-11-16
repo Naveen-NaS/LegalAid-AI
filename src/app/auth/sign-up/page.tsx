@@ -5,19 +5,18 @@ import { useForm } from "react-hook-form";
 import Link from "next/link";
 import Image from "next/image";
 
-// import { z } from "zod";
-// import { signUpSchema } from "@/lib/zod";
-// import { zodResolver } from "@hookform/resolvers/zod";
-// import { handleCredentialsSignUp } from "@/app/actions/authActions";
+import { z } from "zod";
+import { signUpSchema } from "@/lib/zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { handleCredentialsSignUp } from "@/app/actions/authActions";
 
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
-import { HelpCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 import GlobalMessage from "@/components/GlobalMessage";
 import { h1 } from "framer-motion/client";
-// import VerifyEmail from "@/components/EmailVerification";
+import VerifyEmail from "@/components/EmailVerification";
 
 export default function SignUp() {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -30,48 +29,45 @@ export default function SignUp() {
   const [globalSuccess, setGlobalSuccess] = useState("none");
 
   // Sign-up form logic
-  // const {
-  //   register,
-  //   handleSubmit,
-  //   formState: { errors, isSubmitting },
-  // } = useForm<z.infer<typeof signUpSchema>>({
-  //   resolver: zodResolver(signUpSchema),
-  //   defaultValues: {
-  //     username: "",
-  //     email: "",
-  //     password: "",
-  //     confirmPassword: "",
-  //     referralCode: "",
-  //     verifyCode: Math.floor(100000 + Math.random() * 900000).toString(),
-  //     verifyCodeExpiry: new Date(Date.now() + 3600000),
-  //   },
-  // });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<z.infer<typeof signUpSchema>>({
+    resolver: zodResolver(signUpSchema),
+    defaultValues: {
+      email: "",
+      password: "",
+      fullname: "",
+      confirmPassword: "",
+      verifyCode: Math.floor(100000 + Math.random() * 900000).toString(),
+      verifyCodeExpiry: new Date(Date.now() + 3600000),
+    },
+  });
 
 
   // Sign-up submit logic
-  // const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
-  //   try {
-  //     console.log("Values: ", values);
-  //     const result: ServerActionResponse = await handleCredentialsSignUp(values);
-  //     if (result.success) {
-  //       setUsername(values.username);
-  //       setPassword(values.password);
-  //       setEmail(values.email);
-  //       setIsSuccess(true);
-  //       setGlobalMessage(result.message);
-  //       setGlobalSuccess("true");
-  //       console.log("result");
-  //     } else {
-  //       console.log(result.message);
-  //       setGlobalMessage(result.message);
-  //       setGlobalSuccess("false");
-  //     }
-  //   } catch (error) {
-  //     console.error(error);
-  //     setGlobalSuccess("false");
-  //     setGlobalMessage("An unexpected error occurred.");
-  //   }
-  // };
+  const onSubmit = async (values: z.infer<typeof signUpSchema>) => {
+    try {
+      console.log("Values: ", values);
+      const result: ServerActionResponse = await handleCredentialsSignUp(values);
+      if (result.success) {
+        setPassword(values.password);
+        setEmail(values.email);
+        setIsSuccess(true);
+        setGlobalMessage(result.message);
+        setGlobalSuccess("true");
+        console.log("result");
+      } else {
+        console.log(result.message);
+        setGlobalMessage(result.message);
+        setGlobalSuccess("false");
+      }
+    } catch (error) {
+      setGlobalSuccess("false");
+      setGlobalMessage("An unexpected error occurred.");
+    }
+  };
 
   return (
     <div className="h-[100vh] bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 overflow-y-auto">
@@ -95,8 +91,7 @@ export default function SignUp() {
               Enter your details to create an account
             </p>
 
-            {/* <form className="my-8" onSubmit={handleSubmit(onSubmit)}></form> */}
-            <form className="my-8">
+            <form className="my-8" onSubmit={handleSubmit(onSubmit)}>
               {/* Email Address */}
               <LabelInputContainer className="mb-4">
                 <Label htmlFor="email" className="text-neutral-200 mb-1.5">
@@ -107,68 +102,24 @@ export default function SignUp() {
                   placeholder="test@gmail.com"
                   type="email"
                   className="bg-[#334155] text-white"
-                  // {...register("email")}
+                  {...register("email")}
                 />
-                {/* {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>} */}
+                {errors.email && <p className="text-red-500 text-sm">{errors.email.message}</p>}
               </LabelInputContainer>
 
-              {/* Username and Referral Code */}
-              <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-2">
-                <LabelInputContainer className="mb-4">
-                  <Label htmlFor="username" className="text-neutral-200 mb-1.5">
-                    Username
-                  </Label>
-                  <Input
-                    id="username"
-                    placeholder="Enter your username"
-                    type="text"
-                    className="bg-[#334155] text-white"
-                    // {...register("username")}
-                  />
-                  {/* {errors.username && <p className="text-red-500 text-sm">{errors.username.message}</p>} */}
-                </LabelInputContainer>
-
-                <LabelInputContainer className="mb-4 relative">
-                  <Label htmlFor="referralcode" className="text-neutral-200 mb-1.5">
-                    Referral Code
-                  </Label>
-                  <div className="relative">
-                    <Input
-                      id="referralcode"
-                      placeholder="Enter referral code"
-                      type="text"
-                      className="bg-[#334155] text-white"
-                      // {...register("referralCode")}
-
-                    />
-                    {/* Help Icon */}
-                    <Link href="/forum">
-                      <span className="absolute inset-y-0 right-0 flex items-center pr-3 cursor-pointer">
-                        <HelpCircle className="text-white" />
-                        <span
-                          className="tooltip absolute text-xs text-white p-3 rounded-md"
-                          onMouseEnter={(e) => {
-                            const targetElement = e.currentTarget;
-                            const rect = (targetElement as HTMLElement).getBoundingClientRect();
-                            const tooltip = document.createElement("div");
-                            tooltip.innerText = "Fill the forum to get code";
-                            tooltip.className =
-                              "absolute text-xs p-0.5 text-neutral-200 bg-gray-900 rounded-md";
-                              tooltip.style.top = `${rect.top - 25}px`;
-                              tooltip.style.left = `${rect.left - 50}px`;
-                              
-                            document.body.appendChild(tooltip);
-                            targetElement.onmouseleave = () => {
-                              document.body.removeChild(tooltip);
-                            };
-                          }}
-                        />
-                      </span>
-                    </Link>
-                  </div>
-                  {/* {errors.referralCode && <p className="text-red-500 text-sm">{errors.referralCode.message}</p>} */}
-                </LabelInputContainer>
-              </div>
+              <LabelInputContainer className="mb-4">
+                <Label htmlFor="fullname" className="text-neutral-200 mb-1.5">
+                  Full Name
+                </Label>
+                <Input
+                  id="fullname"
+                  placeholder="Enter your full name"
+                  type="text"
+                  className="bg-[#334155] text-white"
+                  {...register("fullname")}
+                />
+                {errors.fullname && <p className="text-red-500 text-sm">{errors.fullname.message}</p>}
+              </LabelInputContainer>
 
               {/* Password and Confirm Password */}
               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-4">
@@ -181,9 +132,9 @@ export default function SignUp() {
                     placeholder="••••••••"
                     type="password"
                     className="bg-[#334155] text-white"
-                    // {...register("password")}
+                    {...register("password")}
                   />
-                  {/* {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>} */}
+                  {errors.password && <p className="text-red-500 text-sm">{errors.password.message}</p>}
                 </LabelInputContainer>
 
                 <LabelInputContainer>
@@ -195,9 +146,9 @@ export default function SignUp() {
                     placeholder="Re-enter Password"
                     type="password"
                     className="bg-[#334155] text-white"
-                    // {...register("confirmPassword")}
+                    {...register("confirmPassword")}
                   />
-                  {/* {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>} */}
+                  {errors.confirmPassword && <p className="text-red-500 text-sm">{errors.confirmPassword.message}</p>}
                 </LabelInputContainer>
               </div>
 
@@ -206,9 +157,7 @@ export default function SignUp() {
                 className="bg-[#20c997] hover:bg-[#17a589] w-full text-white rounded-md h-10 font-medium shadow-lg transition-colors duration-300"
                 type="submit"
               >
-                Create Account &rarr;
-
-                {/* {isSubmitting ? (
+                {isSubmitting ? (
                   <>
                     <svg aria-hidden="true" role="status" className="inline w-4 h-4 me-3 text-gray-200 animate-spin dark:text-gray-600" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
                       <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="currentColor"/>
@@ -221,8 +170,7 @@ export default function SignUp() {
                     Sign up &rarr;
                     <BottomGradient />
                   </>
-                )} */}
-
+                )}
               </button>
 
               {/* Divider */}
@@ -240,9 +188,7 @@ export default function SignUp() {
             </form>
           </div>
         ) : (
-          // <VerifyEmail username={username} email={email} password={password} />
-          // Placeholder for success state or verification component
-          <h1>Hello World!</h1>
+          <VerifyEmail email={email} password={password} />
         )}
       </div>
     </div>

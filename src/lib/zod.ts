@@ -11,7 +11,6 @@ export const signInSchema = object({
 });
 
 export const signUpSchema = object({
-  username: string().min(1, "Username is required"),
   email: string({ required_error: "Email is required" })
           .min(1, "Email is required.")
           .email("Invalid email"),
@@ -19,11 +18,11 @@ export const signUpSchema = object({
           .min(1, "Password is required")
           .min(8, "Password must be more than 8 characters")
           .max(32, "Password must be less than 32 characters"),
+  fullname: string().min(1, "Username is required"),
   confirmPassword: string({ required_error: "Confirm password is required" })
           .min(1, "Confirm password is required")
           .min(8, "Password must be more than 8 characters")
           .max(32, "Password must be less than 32 characters"),
-  referralCode: string().regex(/^\d{5}$/, { message: "Code must be 5 digits" }),
   verifyCode: string(),
   verifyCodeExpiry: date(),
 }).refine((data) => data.password === data.confirmPassword, {
