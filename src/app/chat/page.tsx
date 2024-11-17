@@ -117,6 +117,7 @@ import React, { useState, useEffect, useRef, FormEvent } from "react";
 import axios from "axios";
 import ReactMarkdown from 'react-markdown';
 import Image from 'next/image'; // For using images from public folder
+import { set } from "zod";
 
 interface ChatMessage {
   user: string;
@@ -164,27 +165,48 @@ export default function Chat() {
   const handleNewChat = () => {
     setChat([]);
     setInput("");
+    setSidebarOpen(false);
+    setRecentPrompts([]);
   };
 
-  const handlePromptClick = (prompt: string) => {
+  const handlePromptClick = async (prompt: string) => {
     setInput(prompt);
+    setChat((prevChat) => [...prevChat, { user: "User", message: prompt }]);
+    setRecentPrompts((prevPrompts) => [...prevPrompts, prompt]);
+    setIsLoading(true);
+
+    try {
+      const response = await axios.post("/api/chat", { question: prompt, history: chat });
+      setChat((prevChat) => [
+        ...prevChat,
+        { user: "Bot", message: response.data.answer },
+      ]);
+    } catch (error) {
+      setChat((prevChat) => [
+        ...prevChat,
+        { user: "Bot", message: "Error: Unable to fetch response." },
+      ]);
+    } finally {
+      setIsLoading(false);
+      setInput("");
+    }
   };
 
   return (
     <div className="flex min-h-screen bg-gray-900 text-white">
       {/* Sidebar */}
       <div
-        className={`fixed top-0 left-0 h-full bg-gray-800 p-4 transition-transform ${
+        className={`absolute top-[90px] left-0 h-full bg-gray-800 p-4 transition-transform ${
           sidebarOpen ? "translate-x-0" : "-translate-x-full"
-        } z-30`}
+        } z-30`} // Adjusted top to 70px to place sidebar below navbar
       >
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
           className="text-white mb-4"
         >
-          <Image src="/menu_icon.png" alt="Menu" width={24} height={24} />
+          <Image src="/menu_icon.png" alt="Menu" width={30} height={30} />
         </button>
-
+  
         <button
           onClick={handleNewChat}
           className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4 flex items-center"
@@ -198,17 +220,14 @@ export default function Chat() {
           />
           New Chat
         </button>
-
+  
         <h3 className="text-md font-semibold mb-2">Recent Prompts</h3>
         {recentPrompts.length > 0 ? (
           <ul>
             {recentPrompts.map((prompt, index) => (
-              <li
-                key={index}
-                className="cursor-pointer mb-2 text-blue-300"
-                onClick={() => handlePromptClick(prompt)}
-              >
-                {prompt}
+              <li key={index} className="flex items-center cursor-pointer mb-2" onClick={() => handlePromptClick(prompt)}>
+                <Image src="/message_icon.png" alt="Message Icon" width={16} height={16} className="mr-2 opacity-100" />
+                <span className="text-blue-500">{prompt}</span>
               </li>
             ))}
           </ul>
@@ -216,17 +235,17 @@ export default function Chat() {
           <p>No recent prompts available</p>
         )}
       </div>
-
+  
       {/* Main Chat Area */}
-      <div className="flex flex-col items-center pb-4 pt-20 justify-between flex-1">
+      <div className="flex flex-col items-center pb-4 pt-[calc(70px + 30px)] justify-between flex-1">
         {/* Toggle Sidebar Button */}
         <button
           onClick={() => setSidebarOpen(!sidebarOpen)}
-          className="fixed top-4 left-4 z-10"
+          className="absolute top-[110px] left-4 z-10" // Adjusted top value to move it down below navbar
         >
-          <Image src="/menu_icon.png" alt="Menu" width={24} height={24} />
+          <Image src="/menu_icon.png" alt="Menu" width={30} height={30} />
         </button>
-
+  
         {/* Chat Container */}
         <div
           ref={chatContainerRef}
@@ -245,7 +264,7 @@ export default function Chat() {
             </div>
           ))}
         </div>
-
+  
         {/* User Input Form */}
         <form
           onSubmit={handleSubmit}
@@ -273,4 +292,5 @@ export default function Chat() {
       </div>
     </div>
   );
+
 }
