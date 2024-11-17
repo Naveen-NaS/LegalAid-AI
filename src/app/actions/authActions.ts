@@ -7,39 +7,39 @@ import { sendVerificationEmail } from '@/helpers/sendVerificationEmail';
 import prisma from "@/lib/prisma";
 import bcryptjs from "bcryptjs";
 
-// async function generateNewUserId() {
-//     try {
-//         const latestUser = await prisma.user.findFirst({
-//             orderBy: {
-//                 createdAt: 'desc',
-//             },
-//         });
+async function generateNewUserId() {
+    try {
+        const latestUser = await prisma.user.findFirst({
+            orderBy: {
+                createdAt: 'desc',
+            },
+        });
 
-//         let newUserId: string;
+        let newUserId: string;
 
-//         if (latestUser) {
-//             const latestId = latestUser.id; // e.g., "NR2401"
-//             const currentYear = new Date().getFullYear().toString().slice(-2); // Get last 2 digits of current year
-//             const prefix = latestId.slice(0, 2); // Extract prefix (e.g., "NR")
-//             const lastDigits = parseInt(latestId.slice(-2)); // Get last 2 digits as number
+        if (latestUser) {
+            const latestId = latestUser.id; // e.g., "NR2401"
+            const currentYear = new Date().getFullYear().toString().slice(-2); // Get last 2 digits of current year
+            const prefix = latestId.slice(0, 2); // Extract prefix (e.g., "NR")
+            const lastDigits = parseInt(latestId.slice(-2)); // Get last 2 digits as number
 
-//             // Increment last two digits
-//             const incrementedId = (lastDigits + 1).toString().padStart(2, '0'); // Ensure it is 2 digits
-//             newUserId = `${prefix}${currentYear}${incrementedId}`; // Construct new ID
-//         } else {
-//             // If no users exist, create a default ID
-//             const currentYear = new Date().getFullYear().toString().slice(-2);
-//             newUserId = `NR${currentYear}01`; // Start with NR and current year
-//         }
+            // Increment last two digits
+            const incrementedId = (lastDigits + 1).toString().padStart(2, '0'); // Ensure it is 2 digits
+            newUserId = `${prefix}${currentYear}${incrementedId}`; // Construct new ID
+        } else {
+            // If no users exist, create a default ID
+            const currentYear = new Date().getFullYear().toString().slice(-2);
+            newUserId = `NR${currentYear}01`; // Start with NR and current year
+        }
 
-//         return newUserId;
-//     } catch (error) {
-//         console.error('Error generating user ID:', error);
-//         throw error; // Rethrow or handle error as needed
-//     } finally {
-//         await prisma.$disconnect();
-//     }
-// }
+        return newUserId;
+    } catch (error) {
+        console.error('Error generating user ID:', error);
+        throw error; // Rethrow or handle error as needed
+    } finally {
+        await prisma.$disconnect();
+    }
+}
 
 // // Example usage
 // generateNewUserId()
@@ -109,6 +109,8 @@ export async function handleCredentialsSignUp({ fullname, email, password, confi
             },
         });
 
+        let id = await generateNewUserId();
+
 
         if (existingUserByEmail) {
             if(existingUserByEmail.isEmailVerified) {
@@ -120,6 +122,7 @@ export async function handleCredentialsSignUp({ fullname, email, password, confi
                         email,
                     },
                     data: {
+                        fullname,
                         password: hashedPassword,
                         emailVerifyCode: verifyCode,
                         verifyCodeExpiry,
@@ -130,6 +133,7 @@ export async function handleCredentialsSignUp({ fullname, email, password, confi
             const hashedPassword = await bcryptjs.hash(password, 10);
             await prisma.user.create({
                 data: {
+                    id,
                     email,
                     password: hashedPassword,
                     fullname,
@@ -165,17 +169,17 @@ export async function handleCredentialsSignUp({ fullname, email, password, confi
         //         emailVerifyCode: verifyCode,
         //         verifyCodeExpiry,
         //     },
-        // });
+        // // });
 
-        const emailResponse = await sendVerificationEmail(
-            email,
-            fullname,
-            verifyCode
-        );
-        if (!emailResponse.success) {
-            console.error("Error sending email:", emailResponse.message);
-            return { success: false, message: emailResponse.message}
-        }
+        // const emailResponse = await sendVerificationEmail(
+        //     email,
+        //     fullname,
+        //     verifyCode
+        // );
+        // if (!emailResponse.success) {
+        //     console.error("Error sending email:", emailResponse.message);
+        //     return { success: false, message: emailResponse.message}
+        // }
 
         return { success: true, message: "Account created successfully." };
     } catch (error) {

@@ -54,9 +54,23 @@ export default function SignUp() {
       if (result.success) {
         setPassword(values.password);
         setEmail(values.email);
-        setIsSuccess(true);
-        setGlobalMessage(result.message);
+
+        const response = await fetch("/api/emailotp", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ name: values.fullname, email: values.email, otp: values.verifyCode }),
+        });
+
+        if (!response.ok) {
+          setGlobalSuccess("false");
+          setGlobalMessage("Failed to send OTP message.");
+        }
+
+        setGlobalMessage("OTP sent successfully!");
         setGlobalSuccess("true");
+        setIsSuccess(true);
         console.log("result");
       } else {
         console.log(result.message);

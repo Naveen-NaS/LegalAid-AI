@@ -8,20 +8,21 @@ const resend = new Resend(process.env.RESEND_API_KEY);
 
 export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   if (req.method === 'POST') {
-    const { name, email, subject, message } = req.body;
+    const { name, email, otp } = req.body;
+    console.log("Name: ", name);
+    console.log("Email: ", email);
+    console.log("OTP: ", otp);
 
     try {
       await resend.emails.send({
         from: 'onboarding@resend.dev', 
-        to: 'ekansh.20004@gmail.com', 
-        subject: subject || 'New Contact Form Submission',
+        to: email, 
+        subject: 'LegalAID AI | One Time Password for Email Verification',
         html: `
           <h3>New Contact Form Submission</h3>
-          <p><strong>Name:</strong> ${name}</p>
-          <p><strong>Email:</strong> ${email}</p>
-          <p><strong>Subject:</strong> ${subject}</p>
-          <p><strong>Message:</strong></p>
-          <p>${message}</p>
+          <p><strong>Hi ${name}</strong></p>
+          <p>This is your One Time Password for Email Verification</p>
+          <p><strong> ${otp} </strong></p>
         `,
       });
 
