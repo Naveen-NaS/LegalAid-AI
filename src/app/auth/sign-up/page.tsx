@@ -116,11 +116,11 @@ export default function SignUp() {
               <div className="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-2 mb-2">
                 <LabelInputContainer className="mb-4">
                   <Label htmlFor="username" className="text-neutral-200 mb-1.5">
-                    Username
+                    Fullname
                   </Label>
                   <Input
                     id="username"
-                    placeholder="Enter your username"
+                    placeholder="Enter your Fullname"
                     type="text"
                     className="bg-[#334155] text-white"
                     // {...register("username")}

@@ -264,30 +264,25 @@ const Navbar: React.FC = () => {
         {/* Sign In / Sign Up Buttons for larger screens */}
         <div className="hidden md:flex items-center space-x-4">
           <Link href="/auth/sign-in">
-            <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group 
-            bg-black text-white 
-            focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 
-            transition-all duration-300
-            active:bg-black active:text-white
-            hover:-translate-y-1 hover:shadow-lg transform transition-transform ease-in-out duration-300">
+            <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group bg-black text-white focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 transition-all  active:bg-black active:text-white hover:-translate-y-1 hover:shadow-lg transform ease-in-out duration-300">
               <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md">
                 Sign In
               </span>
             </button>
           </Link>
 
-          <Link href="/auth/sign-up">
+          {/* <Link href="/auth/sign-up">
             <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group 
-            bg-black text-white 
-            focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 
+            bg-black text-white focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 
             transition-all duration-300
             active:bg-black active:text-white
-            hover:-translate-y-1 hover:shadow-lg transform transition-transform ease-in-out duration-300">
+            hover:-translate-y-1 hover:shadow-lg transform ease-in-out">
               <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md">
                 Sign Up
               </span>
             </button>
-          </Link>
+          </Link>*/}
+
         </div>
 
         {/* Mobile Menu */}
@@ -301,7 +296,7 @@ const Navbar: React.FC = () => {
             <Link 
               key={link.title} 
               href={link.href} 
-              className="block py-[10px] text-white font-semibold transition-transform duration-[300ms] hover:-translate-y-[1px] hover:shadow-lg"
+              className="block py-[10px] text-white font-semibold transition-transform duration-&lsqb;300ms&rsqb hover:-translate-y-[1px] hover:shadow-lg"
               onClick={() => setIsOpen(false)}  
             >
               {link.title}
@@ -319,7 +314,7 @@ const Navbar: React.FC = () => {
                 focus:ring-[4px] focus:outline-none focus:ring-purple-[800]
                 transition-all duration-[300ms]
                 active:bg-black active:text-white
-                hover:-translate-y-[1px] hover:shadow-lg transform transition-transform ease-in-out duration-[300ms]"
+                hover:-translate-y-[1px] hover:shadow-lg transform ease-in-out"
                 onClick={() => setIsOpen(false)} 
                 >
                    <span className= 'relative px-[20px] py-[10px] bg-gray-[900] rounded-md'>
@@ -329,21 +324,21 @@ const Navbar: React.FC = () => {
               
             </Link>
 
-             {/* Same for sign-up*/}
+             {/* Same for sign-up
              <Link href="/auth/sign-up">
                <button className="relative inline-flex items-center justify-center p-[0.5rem] mb-[2rem] me-auto ms-auto overflow-hidden text-sm font-medium rounded-lg group 
                  bg-black text-white 
                  focus:ring-[4px] focus:outline-none focus:ring-purple-[800]
                  transition-all duration-[300ms]
                  active:bg-black active:text-white
-                 hover:-translate-y-[1px] hover:shadow-lg transform transition-transform ease-in-out duration-[300ms]"
+                 hover:-translate-y-[1px] hover:shadow-lg transform ease-in-out"
                  onClick={() => setIsOpen(false)} 
                  >
                    <span className= 'relative px-[20px] py-[10px] bg-gray-[900] rounded-md'>
                      Sign Up
                    </span>
                </button>
-             </Link>
+             </Link> */}
            </div>
          </div>
        </div>
