@@ -109,7 +109,7 @@ export async function handleCredentialsSignUp({ fullname, email, password, confi
             },
         });
 
-        let id = await generateNewUserId();
+        const id = await generateNewUserId();
 
 
         if (existingUserByEmail) {

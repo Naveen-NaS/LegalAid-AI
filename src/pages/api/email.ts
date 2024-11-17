@@ -2,7 +2,6 @@
 
 import { Resend } from 'resend';
 import { NextApiRequest, NextApiResponse } from 'next';
-import { p } from 'framer-motion/client';
 
 const resend = new Resend(process.env.RESEND_API_KEY); 
 

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { TriangleIcon, CircleCheckBig } from "lucide-react";
+import { CircleCheckBig } from "lucide-react";
 
 export default function GlobalMessage({ success, message }: { success: string, message: string }) {
   const [isVisible, setIsVisible] = useState(true);
