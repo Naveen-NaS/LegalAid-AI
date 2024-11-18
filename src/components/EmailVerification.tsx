@@ -6,13 +6,13 @@ import Image from 'next/image';
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
-import { set, z } from "zod"
+import { z } from "zod"
 
 import { handleCredentialsSignIn, handelResendVerficationCode } from "@/app/actions/authActions";
 
 import { REGEXP_ONLY_DIGITS } from "input-otp";
 
-import { Form, FormControl, FormDescription, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form"
+import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 
 import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp";
 

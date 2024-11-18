@@ -15,7 +15,6 @@ import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
 
 import GlobalMessage from "@/components/GlobalMessage";
-import { h1 } from "framer-motion/client";
 import VerifyEmail from "@/components/EmailVerification";
 
 export default function SignUp() {
