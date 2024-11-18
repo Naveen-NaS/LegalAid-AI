@@ -16,7 +16,6 @@ export async function POST(request: Request) {
         });
 
         if (existingData) {
-            // If the data exists, update the current_reason field
             const updatedData = await prisma.userCurrentData.update({
             where: { DataId: dataId },
             data: { current_notice: notice }

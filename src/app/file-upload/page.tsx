@@ -62,7 +62,7 @@ export default function FileUploader() {
     setIsUploading(true);
 
     try {
-      const response = await axios.post("/api/uploadPdf", formData, {
+      const response = await axios.post("http://sastelaptop.com:3010/api/uploadPdf", formData, {
         headers: { "Content-Type": "multipart/form-data" },
       });
 

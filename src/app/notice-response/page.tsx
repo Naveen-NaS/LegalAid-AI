@@ -13,7 +13,7 @@ export default function NoticeReply() {
   M/s ABC & CO LIMITED
   301, Jammu & Kashmir
 
-  November 18, 2024
+  **November 18, 2024**
 
   To,
   Mr. Abhinav Kr
@@ -59,7 +59,7 @@ export default function NoticeReply() {
 
   5. Confidentiality: We understand the sensitive nature of this investigation and assure you that we will maintain strict confidentiality regarding all matters related to this summons and the subsequent proceedings.
 
-  6. Continuity of Cooperation: Should any additional information or documentation be required beyond what is currently requested, we commit to providing it promptly upon your request.
+  6. **Continuity of Cooperation:** Should any additional information or documentation be required beyond what is currently requested, we commit to providing it promptly upon your request.
 
   I would like to emphasize that M/s ABC & CO LIMITED is committed to maintaining the highest standards of compliance with all applicable laws and regulations, including the CGST Act. We view this investigation as an opportunity to demonstrate our adherence to legal and ethical business practices.
 

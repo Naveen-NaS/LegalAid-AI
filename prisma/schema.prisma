@@ -54,6 +54,7 @@ model UserCurrentData {
   DataId            String    @id// Primary key with auto-generated UUID
   userId            String
   current_question  String
+  current_reason    String
   current_answer    String
   current_notice    String
 
