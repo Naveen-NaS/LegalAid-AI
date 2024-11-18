@@ -20,7 +20,6 @@ import VerifyEmail from "@/components/EmailVerification";
 export default function SignUp() {
   const [isSuccess, setIsSuccess] = useState(false);
   
-  const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
