@@ -62,7 +62,7 @@ export default function Chat() {
     setIsLoading(true);
 
     try {
-      const response = await axios.post("/api/chat", { question: prompt, history: chat });
+      const response = await axios.post("/api/chat", { question: input, history: chat });
       setChat((prevChat) => [
         ...prevChat,
         { user: "Bot", message: response.data.answer },
