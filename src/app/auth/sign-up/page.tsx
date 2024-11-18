@@ -31,23 +31,17 @@ const sendVerificationMessage = async ({ fullname, email, otp }: {
       to_name: fullname,
       to_email: email,
       subject: "Email Verification Code",
-      message: `
-        Hi ${fullname},
-
-        Thank you for using LegalAID AI. Please use the following OTP to complete your verification:
+      message: `Thank you for using LegalAID AI. Please use the following OTP to complete your verification:
 
         Your OTP code is: ${otp}
 
         This code is valid for the next 15 minutes. If you didn't request this, please ignore this email.
-
-        Best regards,
-        LegalAID AI
       `,
     };
 
     const response = await emailjs.send(
       process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE_ID!,
-      process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE_ID!,
+      process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE_ID_OTP!,
       templateParams,
       process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY!
     );
