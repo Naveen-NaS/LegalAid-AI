@@ -190,7 +190,7 @@ return (
     <div
       className={`fixed top-[90px] left-0 bg-gray-800 p-4 transition-transform ${
         sidebarOpen ? "translate-x-0" : "-translate-x-full"
-      } w-[200px] h-[calc(100vh - 90px)] flex flex-col`} // Sidebar height adjusted to fit within viewport
+      } w-[200px] h-[calc(100vh)] flex flex-col`} // Sidebar height adjusted to fit within viewport
     >
       {/* Fixed Section (Menu icon and New Chat button) */}
       <div className="flex-shrink-0">
