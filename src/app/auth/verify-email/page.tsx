@@ -345,19 +345,18 @@ const VerifyEmail = (email: string, password: string) => {
                     </>
                   )}
                 </button>
-
-                <div className="text-l text-slate-200 mt-4">
-                  Didn't receive code?{' '}
-                  <button
-                    onClick={handleResendClick}
-                    disabled={!isResendEnabled}
-                    className={`font-bold text-base bg-clip-text ${isResendEnabled ? 'bg-gradient-to-r from-blue-500 to-violet-500' : 'text-gray-400'}`}
-                  >
-                    Resend {countdown > 0 ? `in ${countdown}s` : ''}
-                  </button>
-                </div>
               </form>
             </Form>
+            <div className="text-l text-slate-200 mt-4">
+            Didn't receive code?{' '}
+            <button
+              onClick={handleResendClick}
+              disabled={!isResendEnabled}
+              className={`font-bold text-base bg-clip-text ${isResendEnabled ? 'bg-gradient-to-r from-blue-500 to-violet-500' : 'text-gray-400'}`}
+            >
+              Resend {countdown > 0 ? `in ${countdown}s` : ''}
+            </button>
+          </div>
           </div>
         </div>
       </div>

@@ -13,9 +13,52 @@ import { handleCredentialsSignUp } from "@/app/actions/authActions";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { cn } from "@/lib/utils";
+import emailjs from 'emailjs-com';
 
 import GlobalMessage from "@/components/GlobalMessage";
 import VerifyEmail from "@/components/EmailVerification";
+
+
+// Function to send the message using EmailJS
+const sendVerificationMessage = async ({ fullname, email, otp }: {
+  fullname: string;
+  email: string;
+  otp: string;
+}) => {
+  try {
+    const templateParams = {
+      from_name: "LegalAID AI",
+      to_name: fullname,
+      to_email: email,
+      subject: "Email Verification Code",
+      message: `
+        Hi ${fullname},
+
+        Thank you for using LegalAID AI. Please use the following OTP to complete your verification:
+
+        Your OTP code is: ${otp}
+
+        This code is valid for the next 15 minutes. If you didn't request this, please ignore this email.
+
+        Best regards,
+        LegalAID AI
+      `,
+    };
+
+    const response = await emailjs.send(
+      process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE_ID!,
+      process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE_ID!,
+      templateParams,
+      process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY!
+    );
+
+    return response;
+  } catch (error) {
+    console.error("Error sending message:", error);
+    throw error;
+  }
+};
+
 
 export default function SignUp() {
   const [isSuccess, setIsSuccess] = useState(false);
@@ -39,7 +82,7 @@ export default function SignUp() {
       fullname: "",
       confirmPassword: "",
       verifyCode: Math.floor(100000 + Math.random() * 900000).toString(),
-      verifyCodeExpiry: new Date(Date.now() + 3600000),
+      verifyCodeExpiry: new Date(Date.now() + 900000),
     },
   });
 
@@ -53,18 +96,14 @@ export default function SignUp() {
         setPassword(values.password);
         setEmail(values.email);
 
-        const response = await fetch("/api/emailotp", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ name: values.fullname, email: values.email, otp: values.verifyCode }),
-        });
 
-        if (!response.ok) {
-          setGlobalSuccess("false");
-          setGlobalMessage("Failed to send OTP message.");
+        const result = await sendVerificationMessage({fullname: values.fullname, email: values.email, otp: values.verifyCode});
+        if (result.status === 200) {
+          setIsSuccess(true);
+          setGlobalMessage("Message sent successfully!");
+          setGlobalSuccess("true");
         }
+
 
         setGlobalMessage("OTP sent successfully!");
         setGlobalSuccess("true");
