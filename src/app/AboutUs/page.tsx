@@ -1,6 +1,31 @@
 "use client";
 
 import React from "react";
+import { AnimatedTooltip } from "@/components/ui/animated-tooltip"
+
+const people = [
+  {
+    id: 1,
+    name: "Ekansh Juneja",
+    designation: "AI Engineer | Full Stack Developer",
+    image:
+      "/ekansh.jpg",
+  },
+  {
+    id: 2,
+    name: "Naveen Sharma",
+    designation: "AI Engineer | Full Stack Developer",
+    image:
+      "/naveen.jpg",
+  },
+  {
+    id: 3,
+    name: "Megha Mandal",
+    designation: "R&D Engineer",
+    image:
+      "/ekansh.jpg",
+  },
+];
 
 export default function AboutUs() {
   return (
@@ -41,13 +66,8 @@ export default function AboutUs() {
           </p>
 
           {/* Developer Credits */}
-          <div className="mt-8 p-4 bg-[#334155] rounded-md">
-            <h2 className="text-white font-semibold">Developed by:</h2>
-            <ul className="text-white mt-2 space-y-1">
-              <li>Ekansh Juneja</li>
-              <li>Megha Mandal</li>
-              <li>Naveen Sharma</li>
-            </ul>
+          <div className="flex flex-row items-center justify-center mb-10 w-full mt-8 p-4 bg-[#334155] rounded-md">
+            <AnimatedTooltip items={people} />
           </div>
         </div>
       </div>
