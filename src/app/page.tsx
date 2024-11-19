@@ -2,14 +2,25 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { useRef } from "react";
 import { motion } from "framer-motion";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 
 export default function Home() {
+  // Create a reference for the card section with a specific type
+  const cardSectionRef = useRef<HTMLDivElement>(null);
+
+  // Function to scroll to card section
+  const handleScrollToCards = () => {
+    if (cardSectionRef.current) {
+      cardSectionRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
   return (
     <div className="min-h-screen w-full flex flex-wrap items-center justify-center bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 overflow-y-auto">
+      {/* Header Section */}
       <motion.div
         className="text-center p-6 max-w-lg"
         initial={{ opacity: 0, y: -50 }}
@@ -17,18 +28,22 @@ export default function Home() {
         transition={{ duration: 1 }}
       >
         <h1 className="text-5xl font-bold text-white mb-4">LegalAID AI</h1>
-
         <p className="text-lg font-semibold text-indigo-200">
           One stop solution for all your legal problems, whether it’s generating
           replies to notices, general assistance, or knowledge gathering.
           LegalAID AI has you covered.
         </p>
 
-        <button className="mt-6 px-6 py-3 bg-indigo-800 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none">
+        {/* Modify Get Started button with onClick event */}
+        <button
+          onClick={handleScrollToCards} // Scrolls to cards section on click
+          className="mt-6 px-6 py-3 bg-indigo-800 text-white font-semibold rounded-lg shadow-md hover:bg-indigo-700 focus:outline-none"
+        >
           Get Started
         </button>
       </motion.div>
 
+      {/* Image Section */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -43,10 +58,12 @@ export default function Home() {
         />
       </motion.div>
 
+      {/* Cards Section */}
       <motion.div
         initial={{ opacity: 0, scale: 0.9 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 1, delay: 1 }}
+        ref={cardSectionRef} // Reference for scrolling
       >
         <div className="flex flex-wrap justify-center gap-8 md:gap-20 p-4 max-w-6xl mx-auto -mb-[20%]">
           
@@ -130,31 +147,25 @@ export default function Home() {
 const testimonials = [
   {
     quote:
-      "It was the best of times, it was the worst of times, it was the age of wisdom, it was the age of foolishness, it was the epoch of belief, it was the epoch of incredulity, it was the season of Light, it was the season of Darkness, it was the spring of hope, it was the winter of despair.",
-    name: "Charles Dickens",
-    title: "A Tale of Two Cities",
+      "India's land reforms sought to dismantle feudal systems, ensure equity, and uplift marginalized communities. Despite achievements, issues like unequal land distribution and elite resistance persist. This critical evaluation explores their impact, challenges, and the need for renewed efforts to achieve agrarian justice and rural development.",
+    name: "India's Land Reforms: A Legacy of Hopes, Struggles, and Unfinished Agendas",
+    title: "https://www.freelaw.in/legalarticles/Land-Reforms-in-India-A-Critical-Evaluation-",
   },
   {
     quote:
-      "To be, or not to be, that is the question: Whether 'tis nobler in the mind to suffer The slings and arrows of outrageous fortune, Or to take Arms against a Sea of troubles, And by opposing end them: to die, to sleep.",
-    name: "William Shakespeare",
-    title: "Hamlet",
+      "Civil society organizations (CSOs) are vital in strengthening India's democracy by empowering citizens, advocating for human rights, and driving governance reforms. Despite challenges like funding constraints and restrictive regulations, CSOs continue to promote grassroots activism, transparency, and social justice, shaping a more inclusive and resilient democratic framework for India's future.",
+    name: "Civil Society Organizations: Pillars of Indian Democracy",
+    title: "https://www.freelaw.in/legalarticles/The-Role-of-Civil-Society-Organizations-in-Indian-Democracy",
   },
   {
-    quote: "All that we see or seem is but a dream within a dream.",
-    name: "Edgar Allan Poe",
-    title: "A Dream Within a Dream",
-  },
-  {
-    quote:
-      "It is a truth universally acknowledged, that a single man in possession of a good fortune, must be in want of a wife.",
-    name: "Jane Austen",
-    title: "Pride and Prejudice",
+    quote: "AI is transforming the legal landscape by enhancing efficiency, accessibility, and decision-making. From predictive analytics to automated legal documents, it empowers practitioners and citizens alike. However, challenges like bias, transparency, and privacy must be addressed. This article explores how responsible AI adoption can create a more equitable, efficient, and accessible justice system.",
+    name: "AI and the Law: Revolutionizing Justice with Responsibility",
+    title: "https://www.forbesafrica.com/opinion/op-ed/2024/02/12/ai-and-the-law-navigating-the-future-together/",
   },
   {
     quote:
-      "Call me Ishmael. Some years ago—never mind how long precisely—having little or no money in my purse, and nothing particular to interest me on shore, I thought I would sail about a little and see the watery part of the world.",
-    name: "Herman Melville",
-    title: "Moby-Dick",
+      "With the rapid growth of e-commerce in India, protecting consumer data has become critical. Existing frameworks like the IT Act, e-commerce guidelines, and cybersecurity laws aim to address these concerns. The Personal Data Protection Bill promises a robust future framework. Ensuring compliance will foster trust and a secure digital ecosystem.",
+    name: "Safeguarding Consumer Data in India's E-Commerce Boom",
+    title: "https://www.freelaw.in/legalarticles/Protecting-Consumer-Data-in-the-Age-of-E-commerce-A-Study-of-Indian-Laws-and-Practices",
   },
 ];
