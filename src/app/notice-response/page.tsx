@@ -7,109 +7,114 @@ import jsPDF from "jspdf";
 import { saveAs } from "file-saver";
 
 
+import { useSession } from "next-auth/react"
+import { useRouter } from 'next/navigation'
+import { set } from "zod";
+
 
 export default function NoticeReply() {
-  const response = `[LETTERHEAD]
-  M/s ABC & CO LIMITED
-  301, Jammu & Kashmir
+  const { data: session } = useSession();
+  const router = useRouter();
 
-  **November 18, 2024**
+  const [response, setResponse] = useState<string>("");
 
-  To,
-  Mr. Abhinav Kr
-  Superintendent/Appraiser/Senior Intelligence Officer
-  DDI, Kashmir Zonal Unit
-  3rd floor, Plot No. 12, Sector-13
-  Jammu-120001
+  // const response = `[LETTERHEAD]
+  // M/s ABC & CO LIMITED
+  // 301, Jammu & Kashmir
 
-  Subject: Response to Summons under Section 70 of the Central Goods and Services Tax Act, 2017
-  Reference: GSTIN- 01AA6677894657 CBIC-BIN-20240857NNO50012345
+  // **November 18, 2024**
 
-  Dear Mr. Abhinav Kr,
+  // To,
+  // Mr. Abhinav Kr
+  // Superintendent/Appraiser/Senior Intelligence Officer
+  // DDI, Kashmir Zonal Unit
+  // 3rd floor, Plot No. 12, Sector-13
+  // Jammu-120001
 
-  I am writing in response to the summons dated August 28, 2024, issued under Section 70 of the Central Goods and Services Tax Act, 2017 (hereinafter referred to as "CGST Act"), in connection with the investigation of M/S Ram & Company & others.
+  // Subject: Response to Summons under Section 70 of the Central Goods and Services Tax Act, 2017
+  // Reference: GSTIN- 01AA6677894657 CBIC-BIN-20240857NNO50012345
 
-  At the outset, I would like to express our full cooperation with the ongoing investigation and our commitment to comply with all legal requirements under the CGST Act. We acknowledge the importance of this matter and assure you of our complete support throughout the process.
+  // Dear Mr. Abhinav Kr,
 
-  Regarding the summons to appear before you on October 1, 2024, at 11:30 AM at your office, I respectfully request a rescheduling of the appearance date. Due to a pre-existing religious observance on October 1, 2024, I kindly ask if it would be possible to reschedule the appearance to the following business day, October 2, 2024. This slight adjustment would allow me to fulfill my religious obligations while ensuring that I am fully prepared to provide all required information and documents as requested in the summons.
+  // I am writing in response to the summons dated August 28, 2024, issued under Section 70 of the Central Goods and Services Tax Act, 2017 (hereinafter referred to as "CGST Act"), in connection with the investigation of M/S Ram & Company & others.
 
-  In accordance with the summons, I understand that my attendance is necessary to:
+  // At the outset, I would like to express our full cooperation with the ongoing investigation and our commitment to comply with all legal requirements under the CGST Act. We acknowledge the importance of this matter and assure you of our complete support throughout the process.
 
-  1. Give evidence
-  2. Produce documents or things in my possession or under my control
+  // Regarding the summons to appear before you on October 1, 2024, at 11:30 AM at your office, I respectfully request a rescheduling of the appearance date. Due to a pre-existing religious observance on October 1, 2024, I kindly ask if it would be possible to reschedule the appearance to the following business day, October 2, 2024. This slight adjustment would allow me to fulfill my religious obligations while ensuring that I am fully prepared to provide all required information and documents as requested in the summons.
 
-  Specifically, you have requested:
+  // In accordance with the summons, I understand that my attendance is necessary to:
 
-  1. To tender a statement
-  2. To submit copies of ledgers, purchase invoices, bank statements, etc.
+  // 1. Give evidence
+  // 2. Produce documents or things in my possession or under my control
 
-  I assure you that I am diligently preparing all the requested documents and information. To ensure a comprehensive and efficient process, I propose the following course of action:
+  // Specifically, you have requested:
 
-  1. Statement Preparation: I am in the process of preparing a detailed statement that addresses all relevant aspects of the investigation. This statement will be comprehensive and accurately reflect all pertinent information within my knowledge.
+  // 1. To tender a statement
+  // 2. To submit copies of ledgers, purchase invoices, bank statements, etc.
 
-  2. Document Compilation: We are meticulously gathering and organizing all requested documents, including:
-    a) Ledgers
-    b) Purchase invoices
-    c) Bank statements
-    d) Any other relevant documentation that may assist in the investigation
+  // I assure you that I am diligently preparing all the requested documents and information. To ensure a comprehensive and efficient process, I propose the following course of action:
 
-  3. Additional Information: In the spirit of full cooperation, we are also compiling any supplementary information that may be pertinent to the investigation, even if not explicitly requested in the summons.
+  // 1. Statement Preparation: I am in the process of preparing a detailed statement that addresses all relevant aspects of the investigation. This statement will be comprehensive and accurately reflect all pertinent information within my knowledge.
 
-  4. Legal Representation: As per Section 70(2) of the CGST Act, I intend to be accompanied by a legal representative during the appearance. This is to ensure that all legal aspects are properly addressed and to facilitate a smooth process.
+  // 2. Document Compilation: We are meticulously gathering and organizing all requested documents, including:
+  //   a) Ledgers
+  //   b) Purchase invoices
+  //   c) Bank statements
+  //   d) Any other relevant documentation that may assist in the investigation
 
-  5. Confidentiality: We understand the sensitive nature of this investigation and assure you that we will maintain strict confidentiality regarding all matters related to this summons and the subsequent proceedings.
+  // 3. Additional Information: In the spirit of full cooperation, we are also compiling any supplementary information that may be pertinent to the investigation, even if not explicitly requested in the summons.
 
-  6. **Continuity of Cooperation:** Should any additional information or documentation be required beyond what is currently requested, we commit to providing it promptly upon your request.
+  // 4. Legal Representation: As per Section 70(2) of the CGST Act, I intend to be accompanied by a legal representative during the appearance. This is to ensure that all legal aspects are properly addressed and to facilitate a smooth process.
 
-  I would like to emphasize that M/s ABC & CO LIMITED is committed to maintaining the highest standards of compliance with all applicable laws and regulations, including the CGST Act. We view this investigation as an opportunity to demonstrate our adherence to legal and ethical business practices.
+  // 5. Confidentiality: We understand the sensitive nature of this investigation and assure you that we will maintain strict confidentiality regarding all matters related to this summons and the subsequent proceedings.
 
-  Furthermore, I would like to draw your attention to Section 70(1) of the CGST Act, which states that the proper officer shall have the power to summon any person whose attendance he considers necessary either to give evidence or to produce a document or any other thing. We fully respect this authority and are prepared to comply with all lawful requirements under this section.
+  // 6. **Continuity of Cooperation:** Should any additional information or documentation be required beyond what is currently requested, we commit to providing it promptly upon your request.
 
-  In light of the religious observance on the originally scheduled date, I humbly request your consideration in rescheduling the appearance to October 2, 2024, or any other subsequent date that is convenient for your office. I assure you that this slight adjustment will not in any way impede the investigation process, and we will be fully prepared to provide all required information and documents on the rescheduled date.
+  // I would like to emphasize that M/s ABC & CO LIMITED is committed to maintaining the highest standards of compliance with all applicable laws and regulations, including the CGST Act. We view this investigation as an opportunity to demonstrate our adherence to legal and ethical business practices.
 
-  Should you have any questions or require any clarification regarding this response or the requested rescheduling, please do not hesitate to contact me. We remain at your disposal to facilitate this process in any way possible.
+  // Furthermore, I would like to draw your attention to Section 70(1) of the CGST Act, which states that the proper officer shall have the power to summon any person whose attendance he considers necessary either to give evidence or to produce a document or any other thing. We fully respect this authority and are prepared to comply with all lawful requirements under this section.
 
-  Thank you for your understanding and consideration in this matter. We look forward to your favorable response regarding the rescheduling and to cooperating fully with your office in this investigation.
+  // In light of the religious observance on the originally scheduled date, I humbly request your consideration in rescheduling the appearance to October 2, 2024, or any other subsequent date that is convenient for your office. I assure you that this slight adjustment will not in any way impede the investigation process, and we will be fully prepared to provide all required information and documents on the rescheduled date.
 
-  Yours sincerely,
+  // Should you have any questions or require any clarification regarding this response or the requested rescheduling, please do not hesitate to contact me. We remain at your disposal to facilitate this process in any way possible.
 
-  [Your Signature]
+  // Thank you for your understanding and consideration in this matter. We look forward to your favorable response regarding the rescheduling and to cooperating fully with your office in this investigation.
 
-  [Your Name]
-  Indirect Tax Head
-  M/s ABC & CO LIMITED`
+  // Yours sincerely,
+
+  // [Your Signature]
+
+  // [Your Name]
+  // Indirect Tax Head
+  // M/s ABC & CO LIMITED`
 
 
-  // const fetchData = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await fetch('/api/user-data', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ userID }),
-  //     });
+  const userID = session ? session.user?.id : "";
 
-  //     const data = await response.json();
+  const fetchData = async () => {
+      try {
+        const response = await fetch('/api/getQnAs', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userID }),
+        });
+  
+        const result = await response.json();
 
-  //     if (response.ok && data.data) {
-  //       setResponseData(data.data);
-  //       setClientReason(data.data.current_reason || '');
-  //     } else {
-  //       console.error('Failed to fetch data:', data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
-
-  // // Fetch data when the component mounts
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+        const { getResponse } = result.data;
+  
+        setResponse(getResponse);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+  };
+  
+    
+  useEffect(() => {
+      fetchData();
+  }, []);
 
 
   const [displayedText, setDisplayedText] = useState<string>("");

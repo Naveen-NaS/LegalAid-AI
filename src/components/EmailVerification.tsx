@@ -75,7 +75,7 @@ const VerifyEmail = ({ email, password }: VerifyEmailProps) => {
 
   // Handle Resend Click
   const handleResendClick = async () => {
-    setCountdown(45);
+    setCountdown(60);
     setIsResendEnabled(false);
     setVerifyCode(Math.floor(100000 + Math.random() * 900000).toString());
     setVerifyCodeExpiry(new Date(Date.now() + 3600000));

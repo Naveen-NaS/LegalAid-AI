@@ -65,7 +65,6 @@ export default function AboutUs() {
             LEGALAID-AI empowers individuals and businesses to navigate legal challenges with confidence.
           </p>
 
-          {/* Developer Credits */}
           <div className="flex flex-row items-center justify-center mb-10 w-full mt-8 p-4 bg-[#334155] rounded-md">
             <AnimatedTooltip items={people} />
           </div>

@@ -10,7 +10,15 @@ interface Props {
   reasonsData: { reasons: string[] };
 }
 
+import { useSession } from "next-auth/react"
+import { useRouter } from 'next/navigation'
+
 export default function SummonReasons() {
+  const { data: session } = useSession();
+  const router = useRouter()
+
+  const [reasonsStr, setReasonsStr] = useState("");
+
   const [selectedReason, setSelectedReason] = useState<string>("");
   const [extraText, setExtraText] = useState<string>("");
   const [numOfPages, setNumOfPages] = useState<number>(2);
@@ -19,48 +27,46 @@ export default function SummonReasons() {
   const [error, setError] = useState<string | null>(null);
   const [showNoticeReplyPage, setShowNoticeReplyPage] = useState<boolean>(false);
 
-  const reasonsStr = ` I respectfully request a rescheduling of the appearance date (2024-10-01) due to a previously scheduled critical business meeting that cannot be postponed.
-  I am currently out of the country on a long-term business trip and will not return until after the specified date; I kindly request a later date or the option for a virtual appearance.
-  I am undergoing a scheduled medical procedure on the given date and will be unable to attend in person; I would appreciate the opportunity to reschedule or provide the required information through alternative means.
-  I require additional time to gather all the requested documents (ledgers, purchase invoices, bank statements) as they are extensive and stored across multiple locations; I humbly request an extension.
-  I am seeking legal counsel to ensure I can provide accurate and comprehensive information, and I respectfully ask for a brief postponement to allow for proper preparation.
-  Due to a family emergency, I must travel out of state on the specified date; I kindly request a rescheduling or the option to provide the required information in writing.
-  I have a pre-existing court appearance scheduled for the same date and time; I would greatly appreciate the opportunity to reschedule this summons.
-  As the Indirect Tax Head, I am currently involved in a time-sensitive audit process that concludes shortly after the given date; I respectfully request a brief postponement to ensure I can give this matter my full attention.
-  I am experiencing unexpected technical issues with accessing some of the required digital documents and respectfully request a short extension to resolve these problems and compile the necessary information.
-  I have recently changed roles within the company and need additional time to familiarize myself with the specific details requested; I kindly ask for a brief postponement to ensure I can provide accurate and complete information.
-  `
+  // const reasonsStr = ` I respectfully request a rescheduling of the appearance date (2024-10-01) due to a previously scheduled critical business meeting that cannot be postponed.
+  // I am currently out of the country on a long-term business trip and will not return until after the specified date; I kindly request a later date or the option for a virtual appearance.
+  // I am undergoing a scheduled medical procedure on the given date and will be unable to attend in person; I would appreciate the opportunity to reschedule or provide the required information through alternative means.
+  // I require additional time to gather all the requested documents (ledgers, purchase invoices, bank statements) as they are extensive and stored across multiple locations; I humbly request an extension.
+  // I am seeking legal counsel to ensure I can provide accurate and comprehensive information, and I respectfully ask for a brief postponement to allow for proper preparation.
+  // Due to a family emergency, I must travel out of state on the specified date; I kindly request a rescheduling or the option to provide the required information in writing.
+  // I have a pre-existing court appearance scheduled for the same date and time; I would greatly appreciate the opportunity to reschedule this summons.
+  // As the Indirect Tax Head, I am currently involved in a time-sensitive audit process that concludes shortly after the given date; I respectfully request a brief postponement to ensure I can give this matter my full attention.
+  // I am experiencing unexpected technical issues with accessing some of the required digital documents and respectfully request a short extension to resolve these problems and compile the necessary information.
+  // I have recently changed roles within the company and need additional time to familiarize myself with the specific details requested; I kindly ask for a brief postponement to ensure I can provide accurate and complete information.
+  // `
 
-  // const fetchData = async () => {
-  //   setIsLoading(true);
-  //   try {
-  //     const response = await fetch('/api/user-data', {
-  //       method: 'POST',
-  //       headers: {
-  //         'Content-Type': 'application/json',
-  //       },
-  //       body: JSON.stringify({ userID }),
-  //     });
+  const userID = session ? session.user?.id : "";
 
-  //     const data = await response.json();
+  const fetchData = async () => {
+      try {
+        const response = await fetch('/api/getReasons', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          body: JSON.stringify({ userID }),
+        });
+  
+        const result = await response.json();
 
-  //     if (response.ok && data.data) {
-  //       setResponseData(data.data);
-  //       setClientReason(data.data.current_reason || '');
-  //     } else {
-  //       console.error('Failed to fetch data:', data.message);
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching data:', error);
-  //   } finally {
-  //     setIsLoading(false);
-  //   }
-  // };
+        const { getReason } = result.data;
+  
+        setReasonsStr(getReason);
+      } catch (error) {
+        console.error('Error fetching data:', error);
+      }
+  };
+  
+    
+  useEffect(() => {
+      fetchData();
+  }, []);
 
-  // // Fetch data when the component mounts
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+
 
   const reasons = reasonsStr ? reasonsStr.split('\n') : [];
 
@@ -95,11 +101,23 @@ export default function SummonReasons() {
         { headers: { "Content-Type": "application/json" } }
       );
 
-      if (response.status !== 200) {
-        throw new Error("Failed to fetch notice reply");
-      }
+      const noticeData = response.data;
 
-      setNoticeReply(response.data);
+      const addResponse = await fetch("/api/saveNotice", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userID, noticeData }),
+      });
+
+      if (addResponse.ok) {
+          const responseData = await addResponse.json();
+          console.log('Saved successfully:', responseData);
+          router.push('/notice-response');
+      } else {
+          alert('Failed to save notice reply. Please try again.');
+      }
       setShowNoticeReplyPage(true);
     } catch (err) {
       console.error("Error fetching notice reply:", err);

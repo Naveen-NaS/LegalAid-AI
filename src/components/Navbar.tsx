@@ -185,7 +185,11 @@ import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 
+import { useSession } from "next-auth/react"
+
 const Navbar: React.FC = () => {
+  const { data: session } = useSession();
+
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false); // State for mobile menu
 
@@ -262,27 +266,32 @@ const Navbar: React.FC = () => {
         </div>
 
         {/* Sign In / Sign Up Buttons for larger screens */}
-        <div className="hidden md:flex items-center space-x-4">
-          <Link href="/auth/sign-in">
-            <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group bg-black text-white focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 transition-all  active:bg-black active:text-white hover:-translate-y-1 hover:shadow-lg transform ease-in-out duration-300">
-              <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md">
-                Sign In
-              </span>
-            </button>
-          </Link>
-
-          {/* <Link href="/auth/sign-up">
-            <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group 
-            bg-black text-white focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 
-            transition-all duration-300
-            active:bg-black active:text-white
-            hover:-translate-y-1 hover:shadow-lg transform ease-in-out">
-              <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md">
-                Sign Up
-              </span>
-            </button>
-          </Link>*/}
-
+        <div> 
+          {!session ? (
+            <div className="hidden md:flex items-center space-x-4">
+              <Link href="/auth/sign-in">
+                <button className="relative inline-flex items-center justify-center p-0.5 mb-2 me-2 overflow-hidden text-sm font-medium rounded-lg group bg-black text-white focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 transition-all  active:bg-black active:text-white hover:-translate-y-1 hover:shadow-lg transform ease-in-out duration-300">
+                  <span className="relative px-5 py-2.5 transition-all ease-in duration-75 bg-gray-900 rounded-md">
+                    Sign In
+                  </span>
+                </button>
+              </Link>
+            </div>
+          ): (
+            <div className="flex gap-2">
+              <p className="relative font-bold text-white text-lg">Hi, {session.user?.fullname}</p>
+              <Link href="/profile">
+                <Image
+                    src="/user_icon.png"
+                    alt="Logo"
+                    className="hover:opacity-80 transition-opacity duration-300"
+                    width={40}
+                    height={40}
+                    style={{ maxWidth: "100%", height: "auto" }}
+                  />
+              </Link>
+            </div>
+          )}
         </div>
 
         {/* Mobile Menu */}

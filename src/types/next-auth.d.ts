@@ -7,6 +7,13 @@ declare module "next-auth" {
         fullname: string
         email: string
         image?: string
+        isEmailVerified: boolean
+        createdAt: Date
+        updatedAt: Date
+        last_login?: Date
+        last_logout?: Date
+        pdf_upload_count: number
+        notice_generate_count: number
     }
     interface Session {
         user: User
@@ -19,5 +26,12 @@ declare module "next-auth/jwt" {
         fullname: string
         email: string
         image?: string
+        isEmailVerified: boolean
+        createdAt: Date
+        updatedAt: Date
+        last_login?: Date
+        last_logout?: Date
+        pdf_upload_count: number
+        notice_generate_count: number
     }
 }

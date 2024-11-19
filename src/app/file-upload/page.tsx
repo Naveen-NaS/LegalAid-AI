@@ -3,8 +3,17 @@
 import { useState, DragEvent, ChangeEvent } from "react";
 import axios from "axios";
 import Image from "next/image";
+import { Session } from "inspector/promises";
+
+import GlobalMessage from "@/components/GlobalMessage";
+
+import { useSession } from "next-auth/react"
+import { useRouter } from 'next/navigation'
 
 export default function FileUploader() {
+  const { data: session } = useSession();
+  const router = useRouter()
+
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
@@ -12,6 +21,9 @@ export default function FileUploader() {
   const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isSummon, setIsSummon] = useState(false);
+
+  const [globalMessage, setGlobalMessage] = useState("");
+  const [globalSuccess, setGlobalSuccess] = useState("none");
 
   const [reasonsData, setReasonsData] = useState("");
   const [showReasonsPage, setShowReasonsPage] = useState(false);
@@ -95,6 +107,25 @@ export default function FileUploader() {
         const response = await axios.get("http://sastelaptop.com:3010/api/getReasons");
         const reasons = response.data;
         setReasonsData(reasons);
+
+        const userId = session ? session.user?.id : "";
+
+        const addResponse = await fetch("/api/saveReasons", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, reasons }),
+        });
+
+        const responseData = await addResponse.json();
+        if (addResponse.ok) {
+          router.push('/qnas');
+        } else {
+          setGlobalMessage(responseData.message);
+          setGlobalSuccess("false");
+        }
+
         setShowReasonsPage(true);
       }
       else {
@@ -102,7 +133,24 @@ export default function FileUploader() {
         const questions = response.data.questions;
         const answer = response.data.answer;
 
-        setQuestionsData({ questions, answer });
+        const userId = session ? session.user?.id : "";
+
+        const addResponse = await fetch("/api/saveQnAs", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ userId, questions, answer }),
+        });
+
+        const responseData = await addResponse.json();
+        if (addResponse.ok) {
+          router.push('/qnas');
+        } else {
+          setGlobalMessage(responseData.message);
+          setGlobalSuccess("false");
+        }
+
         setShowQuestionsPage(true);
       }
     } catch (error) {
@@ -112,6 +160,9 @@ export default function FileUploader() {
 
   return (
     <div className="flex flex-col items-center justify-center px-4 h-screen">
+      {globalMessage && (
+              <GlobalMessage success={globalSuccess} message={globalMessage} />
+      )}
       <div className="mb-6">
         <Image src="/logo.png" alt="Logo" width={125} height={125} />
       </div>

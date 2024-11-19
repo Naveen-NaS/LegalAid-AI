@@ -5,55 +5,59 @@ import Image from 'next/image';
 // import { useTypewriter, Cursor } from 'react-simple-typewriter';
 // import NoticeReply from './NoticeReply';
 import axios from 'axios';
+import { set } from 'zod';
+
+import { useSession } from "next-auth/react"
+import { useRouter } from 'next/navigation'
 
 
 export default function QuestionsPage() {
-    // const [questions, setQuestions] = useState("");
-    // const [preAnswers, setPreAnswers] = useState("");
+    const { data: session } = useSession();
+    const router = useRouter()
 
+    const [questions, setQuestions] = useState("");
+    const [preAnswers, setPreAnswers] = useState("");
 
-    const questions = `What is the client's desired outcome (e.g., full monetary recovery, return of the vehicle, or both)?
-    Does the client possess the original agreement and any documentation related to payments made and received, including returned checks, and are they willing to share these documents?
-    Can you provide documentation or evidence supporting the possession status and condition of the BAJAJ PICK UP VAN, R.C. No. DL1LL-5540, as currently held under the possession of M/S. PRJ ENTERPRISERS LTD?
-    Please enter any relevant details you want to be considered while generating the notice reply.
-    `
+    // const questions = `What is the client's desired outcome (e.g., full monetary recovery, return of the vehicle, or both)?
+    // Does the client possess the original agreement and any documentation related to payments made and received, including returned checks, and are they willing to share these documents?
+    // Can you provide documentation or evidence supporting the possession status and condition of the BAJAJ PICK UP VAN, R.C. No. DL1LL-5540, as currently held under the possession of M/S. PRJ ENTERPRISERS LTD?
+    // Please enter any relevant details you want to be considered while generating the notice reply.
+    // `
 
-    const preAnswers = `The client's desired outcome is both the full monetary recovery including principal investment, accrued arrears, legal costs, and interest, as well as the return of the BAJAJ PICK UP VAN, R.C. No. DL1LL-5540.
-    The client appears to possess the original agreement and likely has documentation related to payments made and received, including returned checks, as mentioned in the notice, and seems willing to share these documents for legal proceedings.
-    Documentation or evidence supporting the possession status and condition of the vehicle is not specified, but it's mentioned that the vehicle was registered in the clients name and has always remained under the possession of M/S. PRJ ENTERPRISERS LTD.
-    No
-    `
+    // const preAnswers = `The client's desired outcome is both the full monetary recovery including principal investment, accrued arrears, legal costs, and interest, as well as the return of the BAJAJ PICK UP VAN, R.C. No. DL1LL-5540.
+    // The client appears to possess the original agreement and likely has documentation related to payments made and received, including returned checks, as mentioned in the notice, and seems willing to share these documents for legal proceedings.
+    // Documentation or evidence supporting the possession status and condition of the vehicle is not specified, but it's mentioned that the vehicle was registered in the clients name and has always remained under the possession of M/S. PRJ ENTERPRISERS LTD.
+    // No
+    // `
 
-    // const fetchData = async () => {
-    //     setIsLoading(true);
-    //     try {
-    //       const response = await fetch('/api/user-data', {
-    //         method: 'POST',
-    //         headers: {
-    //           'Content-Type': 'application/json',
-    //         },
-    //         body: JSON.stringify({ userID }),
-    //       });
+    const userID = session ? session.user?.id : "";
+
+    const fetchData = async () => {
+        try {
+          const response = await fetch('/api/getQnAs', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ userID }),
+          });
     
-    //       const data = await response.json();
+          const result = await response.json();
+
+          const { getQuestions, getAnswers } = result.data;
     
-    //       if (response.ok && data.data) {
-    //         setResponseData(data.data);
-    //         setClientReason(data.data.current_reason || '');
-    //       } else {
-    //         console.error('Failed to fetch data:', data.message);
-    //       }
-    //     } catch (error) {
-    //       console.error('Error fetching data:', error);
-    //     } finally {
-    //       setIsLoading(false);
-    //     }
-    //   };
+          setQuestions(getQuestions);
+          setPreAnswers(getAnswers);
+        } catch (error) {
+          console.error('Error fetching data:', error);
+        }
+    };
     
-    //   // Fetch data when the component mounts
-    //   useEffect(() => {
-    //     fetchData();
-    //   }, []);
+      
+    useEffect(() => {
+        fetchData();
+    }, []);
+
 
     const questionsArr = questions ? questions.split('\n') : [];
     const preAnswersArr = preAnswers ? preAnswers.split('\n') : [];
@@ -95,34 +99,54 @@ export default function QuestionsPage() {
     };
 
     const handleSubmit = async () => {
-        try {
         setLoading(true);
-        const response = await axios.post('/api/fetchQnAs', {
-            questions: questionsArr.filter((_, index) => selectedQuestions[index]),
-            answers: answers.filter((_, index) => selectedQuestions[index]),
-        });
+        try {
+            const filteredQuestions = questionsArr.filter((_, index) => selectedQuestions[index]);
+            const filteredAnswers = answers.filter((_, index) => selectedQuestions[index]);
+    
+            const response = await axios.post('http://sastelaptop.com:3010/api/fetchQnAs', {
+                questions: filteredQuestions,
+                answers: filteredAnswers,
+            });
 
-        const pageNums = await axios.post('/api/fetchNumPages', {
-            numOfPages,
-        });
+            const pageNums = await axios.post('http://sastelaptop.com:3010/api/fetchNumPages', {
+                numOfPages,
+            });
+    
+            if (response.status === 200) {
+                const noticeResponse = await axios.get('http://sastelaptop.com:3010/api/getNoticeReply');
+                if (noticeResponse.status === 200) {
+                    const noticeData = noticeResponse.data;
 
-        if (response.status === 200) {
-            const noticeResponse = await axios.get('/api/getNoticeReply');
-            if (noticeResponse.status === 200) {
-            setNoticeReply({ result: noticeResponse.data });
-            setLoading(false);
-            setShowNoticeReplyPage(true);
+    
+                    const addResponse = await fetch("/api/saveNotice", {
+                        method: "POST",
+                        headers: {
+                            "Content-Type": "application/json",
+                        },
+                        body: JSON.stringify({ userID, noticeData }),
+                    });
+    
+                    if (addResponse.ok) {
+                        const responseData = await addResponse.json();
+                        console.log('Saved successfully:', responseData);
+                        router.push('/notice-response');
+                    } else {
+                        alert('Failed to save notice reply. Please try again.');
+                    }
+                } else {
+                    alert('Failed to fetch notice reply. Please try again.');
+                }
+            } else {
+                alert('Failed to submit answers. Please try again.');
             }
-        } else {
-            alert('Failed to submit answers. Please try again.');
+        } catch (error) {
+            console.error('Error submitting answers:', error);
+            alert('An error occurred. Please try again later.');
+        } finally {
             setLoading(false);
         }
-        } catch (error) {
-        console.error('Error submitting answers:', error);
-        alert('An error occurred. Please try again later.');
-        setLoading(false);
-        }
-    };
+    };    
 
     return (
         <>

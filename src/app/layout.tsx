@@ -38,7 +38,8 @@
 import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
-import Navbar from "@/components/Navbar"; // Import the Navbar component
+import Navbar from "@/components/Navbar";
+import { SessionProvider } from "next-auth/react";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -64,10 +65,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-        <Navbar />
-        <div style={{ paddingTop: '70px' }}> {/* Apply padding here */}
-          {children}
-        </div>
+        <SessionProvider>
+          <Navbar />
+          <div style={{ paddingTop: '70px' }}> {/* Apply padding here */}
+            {children}
+          </div>
+        </SessionProvider>
       </body>
     </html>
   );
