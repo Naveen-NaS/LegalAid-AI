@@ -18,7 +18,10 @@ import { cn } from "@/lib/utils";
 import GlobalMessage from "@/components/GlobalMessage";
 import { AuthError } from "next-auth";
 
+import { redirect } from 'next/navigation'
+
 export default function SignIn() {
+
   const [globalMessage, setGlobalMessage] = useState("");
   const [globalSuccess, setGlobalSuccess] = useState("none");
 
@@ -54,6 +57,7 @@ export default function SignIn() {
       setGlobalSuccess("false");
       setGlobalMessage("An unexpected error occurred.");
     }
+    redirect(`/`)
   };
 
 

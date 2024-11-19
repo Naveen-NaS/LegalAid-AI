@@ -21,6 +21,8 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 
 import GlobalMessage from "@/components/GlobalMessage";
 
+import { redirect } from 'next/navigation'
+
 const OTPSchema = z.object({
   email: z.string().min(1, "Email is required.").email("Invalid email"),
   pin: z
@@ -110,6 +112,7 @@ const VerifyEmail = ({ email, password }: VerifyEmailProps) => {
       const responseData = await response.json();
       if (response.ok) {
         await handleCredentialsSignIn({ email, password });
+        redirect(`/`);
         setGlobalMessage(responseData.message);
         setGlobalSuccess("true");
       } else {
