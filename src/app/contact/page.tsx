@@ -2,25 +2,30 @@
 
 // import React, { useState } from "react";
 // import { useForm } from "react-hook-form";
+// import emailjs from 'emailjs-com';
 
-
+// // Function to send the message using EmailJS
 // const sendMessage = async (data: any) => {
 //   try {
-//     const response = await fetch("/api/email", {
-//       method: "POST",
-//       headers: {
-//         "Content-Type": "application/json",
-//       },
-//       body: JSON.stringify(data),
-//     });
+//     const templateParams = {
+//       from_name: data.name,
+//       from_email: data.email,
+//       subject: data.subject,
+//       message: data.message,
+//     };
 
-//     if (!response.ok) {
-//       throw new Error("Failed to send message");
-//     }
+//     // Send email using EmailJS
+//     const response = await emailjs.send(
+//       process.env.NEXT_PUBLIC_EMAIL_JS_SERVICE_ID!,
+//       process.env.NEXT_PUBLIC_EMAIL_JS_TEMPLATE_ID!,
+//       templateParams,
+//       process.env.NEXT_PUBLIC_EMAIL_JS_PUBLIC_KEY!
+//     );
 
-//     return await response.json();
+//     return response;
 //   } catch (error) {
 //     console.error("Error sending message:", error);
+//     throw error;
 //   }
 // };
 
@@ -29,19 +34,17 @@
 //   const [globalMessage, setGlobalMessage] = useState("");
 //   const [globalSuccess, setGlobalSuccess] = useState("none");
 
-
-//   const { register, handleSubmit, formState: { errors }, setError, clearErrors } = useForm();
+//   const { register, handleSubmit, formState: { errors } } = useForm();
 
 //   const onSubmit = async (data: any) => {
-//     console.log('Submitting data:', data); 
-//     const result = await sendMessage(data);
-//     console.log('Result:', result); 
-  
-//     if (result?.success) {
-//       setIsSuccess(true);
-//       setGlobalMessage("Message sent successfully!");
-//       setGlobalSuccess("true");
-//     } else {
+//     try {
+//       const result = await sendMessage(data);
+//       if (result.status === 200) {
+//         setIsSuccess(true);
+//         setGlobalMessage("Message sent successfully!");
+//         setGlobalSuccess("true");
+//       }
+//     } catch (error) {
 //       setGlobalMessage("Failed to send message.");
 //       setGlobalSuccess("false");
 //     }
@@ -49,9 +52,8 @@
 
 //   return (
 //     <div className="h-[100vh] bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 overflow-y-auto">
- 
 //       <div className="w-full bg-[#1e293b] py-10">
-//         <div className="ml-8"> 
+//         <div className="ml-8">
 //           <h2 className="text-white text-lg">Reach out to Us</h2>
 //           <h1 className="font-bold text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500">
 //             Contact Us
@@ -59,7 +61,6 @@
 //         </div>
 //       </div>
 
-   
 //       <div className="min-h-[90vh] w-full flex items-start justify-center px-4 sm:px-6 md:px-8 lg:px-10 mt-4 md:mt-8 mb-12">
 //         {!isSuccess ? (
 //           <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-6 shadow-input bg-[#1e293b]">
@@ -149,6 +150,7 @@
 //   );
 // }
 
+// // LabelInputContainer component for consistent styling of form fields
 // const LabelInputContainer: React.FC<{ className?: string; children: React.ReactNode }> = ({ className, children }) => {
 //   return (
 //     <div className={`flex flex-col w-full ${className}`}>
@@ -156,7 +158,6 @@
 //     </div>
 //   );
 // };
-
 
 "use client";
 
@@ -212,15 +213,17 @@ export default function ContactUs() {
 
   return (
     <div className="h-[100vh] bg-gradient-to-br from-blue-600 via-indigo-500 to-purple-600 overflow-y-auto">
-      <div className="w-full bg-[#1e293b] py-10">
+      {/* Header Section - Adjusted to match About Us */}
+      <div className="w-full bg-[#1e293b] py-8"> {/* Same padding as About Us */}
         <div className="ml-8">
-          <h2 className="text-white text-lg">Reach out to Us</h2>
-          <h1 className="font-bold text-4xl md:text-5xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500">
+          <h2 className="text-white text-sm mb-1">Reach out to Us</h2> {/* Same size as Learn More About in About Us */}
+          <h1 className="font-bold text-3xl md:text-4xl text-transparent bg-clip-text bg-gradient-to-r from-blue-500 to-violet-500">
             Contact Us
-          </h1>
+          </h1> {/* Same size as About Us heading */}
         </div>
       </div>
 
+      {/* Contact Form Section */}
       <div className="min-h-[90vh] w-full flex items-start justify-center px-4 sm:px-6 md:px-8 lg:px-10 mt-4 md:mt-8 mb-12">
         {!isSuccess ? (
           <div className="max-w-md w-full mx-auto rounded-none md:rounded-2xl p-4 md:p-6 shadow-input bg-[#1e293b]">
