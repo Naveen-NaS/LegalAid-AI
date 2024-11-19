@@ -206,8 +206,8 @@ const Navbar: React.FC = () => {
 
   const links = [
     { title: "Home", href: "/" },
-    { title: "About Us", href: "/AboutUs" },
-    { title: "Latest", href: "/Latest" },
+    { title: "About Us", href: "/aboutUs" },
+    { title: "Latest", href: "/latest" },
     { title: "Contact", href: "/contact" },
   ];
 
