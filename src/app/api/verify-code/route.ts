@@ -2,9 +2,10 @@ import prisma from "@/lib/prisma";
 
 export async function POST(request: Request) {
   try {
-    const { email, verifyCode } = await request.json();
+    const { email, pin } = await request.json(); // Make sure 'pin' is received here
+
     console.log('Email:', email);
-    console.log('Verification code:', verifyCode);
+    console.log('Verification code:', pin);
 
     const user = await prisma.user.findUnique({ where: { email } });
 
@@ -15,7 +16,7 @@ export async function POST(request: Request) {
       );
     }
 
-    const isCodeValid = user.emailVerifyCode === verifyCode;
+    const isCodeValid = user.emailVerifyCode === pin;
     
     const isCodeNotExpired = new Date(user.verifyCodeExpiry) > new Date();
 
@@ -44,9 +45,10 @@ export async function POST(request: Request) {
         { status: 400 }
       );
     }
+    
   } catch (error) {
-    console.log('Error verifying user:', error);
     console.error('Error verifying user:', error);
+    
     return Response.json(
       { success: false, message: 'Error verifying user' },
       { status: 500 }
