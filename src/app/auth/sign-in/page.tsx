@@ -18,10 +18,9 @@ import { cn } from "@/lib/utils";
 import GlobalMessage from "@/components/GlobalMessage";
 import { AuthError } from "next-auth";
 
-import { useRouter } from 'next/navigation'
+import { redirect } from 'next/navigation'
 
 export default function SignIn() {
-  const router = useRouter();
 
   const [globalMessage, setGlobalMessage] = useState("");
   const [globalSuccess, setGlobalSuccess] = useState("none");
@@ -46,7 +45,6 @@ export default function SignIn() {
       console.log("Values: ", values);
       const result: AuthError | undefined = await handleCredentialsSignIn(values);
       if (result) {
-        router.push('/');
         setGlobalMessage(result.message);
         setGlobalSuccess("false");
       } else {
@@ -59,6 +57,7 @@ export default function SignIn() {
       setGlobalSuccess("false");
       setGlobalMessage("An unexpected error occurred.");
     }
+    redirect(`/`)
   };
 
 

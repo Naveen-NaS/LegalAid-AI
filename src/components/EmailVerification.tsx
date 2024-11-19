@@ -21,9 +21,7 @@ import { InputOTP, InputOTPGroup, InputOTPSlot } from "@/components/ui/input-otp
 
 import GlobalMessage from "@/components/GlobalMessage";
 
-import { useRouter } from 'next/navigation'
-
-
+import { redirect } from 'next/navigation'
 
 const OTPSchema = z.object({
   email: z.string().min(1, "Email is required.").email("Invalid email"),
@@ -47,8 +45,6 @@ interface VerifyEmailProps {
 }
 
 const VerifyEmail = ({ email, password }: VerifyEmailProps) => {
-  const router = useRouter();
-
   const [countdown, setCountdown] = useState(60);
   const [isResendEnabled, setIsResendEnabled] = useState(false);
 
@@ -116,7 +112,7 @@ const VerifyEmail = ({ email, password }: VerifyEmailProps) => {
       const responseData = await response.json();
       if (response.ok) {
         await handleCredentialsSignIn({ email, password });
-        router.push('/');
+        redirect(`/`);
         setGlobalMessage(responseData.message);
         setGlobalSuccess("true");
       } else {

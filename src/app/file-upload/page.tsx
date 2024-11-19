@@ -14,13 +14,15 @@ export default function FileUploader() {
   const { data: session } = useSession();
   const router = useRouter()
 
+  const userId = session ? session.user?.id : "";
+
   const [file, setFile] = useState<File | null>(null);
   const [isDragging, setIsDragging] = useState(false);
   const [uploadStatus, setUploadStatus] = useState<string | null>(null);
   const [fileURL, setFileURL] = useState<string | null>(null);
   const [isUploadSuccessful, setIsUploadSuccessful] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
-  const [isSummon, setIsSummon] = useState(false);
+  const [isSummon, setIsSummon] = useState("false");
 
   const [globalMessage, setGlobalMessage] = useState("");
   const [globalSuccess, setGlobalSuccess] = useState("none");
@@ -98,42 +100,40 @@ export default function FileUploader() {
     setFileURL(null);
     setUploadStatus(null);
     setIsUploadSuccessful(false);
-    setIsSummon(false);
+    setIsSummon("false");
   };
 
   const handleContinue = async () => {
     try {
-      if(isSummon == true){
+      if(isSummon == "true"){
         const response = await axios.get("http://sastelaptop.com:3010/api/getReasons");
         const reasons = response.data;
         setReasonsData(reasons);
+        console.log("Reasons: ", reasons);
 
-        const userId = session ? session.user?.id : "";
+        console.log("User ID: ", userId);
 
         const addResponse = await fetch("/api/saveReasons", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userId, reasons }),
+          body: JSON.stringify({ userID: String(userId), reasons: String(reasons) }),
         });
 
         const responseData = await addResponse.json();
         if (addResponse.ok) {
-          router.push('/qnas');
+          router.push('/summon-reasons');
         } else {
           setGlobalMessage(responseData.message);
           setGlobalSuccess("false");
         }
 
-        setShowReasonsPage(true);
       }
       else {
         const response = await axios.get("http://sastelaptop.com:3010/api/getQuestions");
         const questions = response.data.questions;
         const answer = response.data.answer;
-
-        const userId = session ? session.user?.id : "";
 
         const addResponse = await fetch("/api/saveQnAs", {
           method: "POST",

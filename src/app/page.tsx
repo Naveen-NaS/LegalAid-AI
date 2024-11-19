@@ -7,7 +7,12 @@ import { motion } from "framer-motion";
 import { InfiniteMovingCards } from "@/components/ui/infinite-moving-cards";
 import { CardBody, CardContainer, CardItem } from "@/components/ui/3d-card";
 
+
+import { useSession } from "next-auth/react"
+
 export default function Home() {
+  const { data: session } = useSession();
+  console.log(session);
   // Create a reference for the card section with a specific type
   const cardSectionRef = useRef<HTMLDivElement>(null);
 
@@ -68,7 +73,7 @@ export default function Home() {
         <div className="flex flex-wrap justify-center gap-8 md:gap-20 p-4 max-w-6xl mx-auto -mb-[20%]">
           
           {/* Notice Reply Generator Card */}
-          <Link href="/notice">
+          <Link href="/file-upload">
             <CardContainer className="inter-var cursor-pointer">
               <CardBody className="hover:shadow-2xl bg-gradient-to-br from-customBlue1 via-customBlue2 to-customPurple w-full max-w-sm md:max-w-md h-auto rounded-xl p-6 border">
                 <CardItem translateZ="50" className="text-xl font-bold text-neutral-700">

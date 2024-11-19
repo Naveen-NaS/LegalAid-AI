@@ -2,10 +2,13 @@ import prisma from "@/lib/prisma";
 
 export async function POST(request: Request) {
     try {
-        const { userID } = await request.json();
-        console.log('User ID: ', userID);
+        const body = await request.json();
+        console.log("Request Body:", body);
+
+        const { userID } = body;
 
         const dataId = "NRUA01";
+        console.log('User ID:', userID);
 
         const existingData = await prisma.userCurrentData.findFirst({
             where: {
@@ -14,11 +17,15 @@ export async function POST(request: Request) {
             }
         });
 
+        console.log("Existing Data:", existingData);
+
         const notice_response = existingData?.current_notice;
 
-        return Response.json(
-            { success: true, message: 'Notice fetched successfully', data: { notice_response } },
-            { status: 200 }
+        console.log("Notice Response:", notice_response);
+
+        return new Response(
+            JSON.stringify(notice_response),
+            { status: 200, headers: { "Content-Type": "application/json" } }
         );
     } catch (error) {
         console.error('Error processing request:', error);

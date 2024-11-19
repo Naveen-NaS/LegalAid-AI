@@ -25,7 +25,6 @@ export async function POST(request: Request) {
             { status: 200 }
             );
         } else {
-            // If the data does not exist, create a new record
             const newData = await prisma.userCurrentData.create({
             data: {
                 DataId: dataId,

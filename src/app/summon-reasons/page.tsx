@@ -12,6 +12,8 @@ interface Props {
 
 import { useSession } from "next-auth/react"
 import { useRouter } from 'next/navigation'
+import { set } from "zod";
+
 
 export default function SummonReasons() {
   const { data: session } = useSession();
@@ -40,35 +42,39 @@ export default function SummonReasons() {
   // `
 
   const userID = session ? session.user?.id : "";
+  console.log('UserID:', userID);
 
-  const fetchData = async () => {
-      try {
-        const response = await fetch('/api/getReasons', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({ userID }),
-        });
-  
-        const result = await response.json();
-
-        const { getReason } = result.data;
-  
-        setReasonsStr(getReason);
-      } catch (error) {
-        console.error('Error fetching data:', error);
-      }
-  };
-  
-    
   useEffect(() => {
-      fetchData();
-  }, []);
+    const initializeData = async () => {
+      if (session) {
+        const userID = session.user?.id; // Adjust based on how user ID is stored in session
+        if (userID) {
+              const response = await fetch('/api/getReasons', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ userID: String(userID) }),
+              });
+          
+              const result = await response.json();
+              console.log('Result:', result);
+          
+              const { getReason } = result;
+              setReasonsStr(result);
+        }
+      }
+    };
+
+    initializeData();
+  }, [session]);
+
+  console.log('Reasons:', reasonsStr);
 
 
 
-  const reasons = reasonsStr ? reasonsStr.split('\n') : [];
+  const reasons = reasonsStr ? reasonsStr.split('.,') : [];
+  console.log('Reasons:', reasons);
 
   const handleOptionSelect = (reason: string) => setSelectedReason(reason);
 
@@ -102,13 +108,15 @@ export default function SummonReasons() {
       );
 
       const noticeData = response.data;
+      console.log('Notice Data:', noticeData);
+      console.log('User ID:', userID);
 
       const addResponse = await fetch("/api/saveNotice", {
           method: "POST",
           headers: {
               "Content-Type": "application/json",
           },
-          body: JSON.stringify({ userID, noticeData }),
+          body: JSON.stringify({ userID: String(userID), notice: String(noticeData) }),
       });
 
       if (addResponse.ok) {
