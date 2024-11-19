@@ -51,7 +51,7 @@ export async function handleCredentialsSignIn({ email, password }: {
     password: string,
 }): Promise<AuthError | undefined> {
     try {
-        await signIn("credentials", {email, password, redirectTo: "/"});
+        await signIn("credentials", {email, password });
     } catch (error) {
         if(error instanceof AuthError) {
             switch(error.type) {
